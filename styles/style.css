@@ -1,0 +1,16 @@
+.apiDocs {
+  overflow: hidden;
+  margin: 15px 0px;
+}
+
+.apiDocs select:focus {
+  outline: 0;
+}
+.apiDocs select:hover {
+  cursor: pointer;
+}
+
+#consoleDiv {
+  overflow: auto;
+  position: relative;
+}

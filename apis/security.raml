@@ -1,0 +1,121 @@
+#%RAML 0.8
+title: "GestaltSecurity"
+version: 1.0.0
+baseUri: "HTTP://localhost:9010"
+schemas: 
+    - 
+        "GestaltApplication": '{"type":"object","title":"GestaltApplication","properties":{"orgId":{"type":"string","required":true,"title":"orgId"},"appName":{"type":"string","required":true,"title":"appName"},"appId":{"type":"string","required":true,"title":"appId"}}}'
+        "GestaltErrorMessage": '{"type":"object","title":"GestaltErrorMessage","properties":{"message":{"type":"string","required":true,"title":"message"},"developerMessage":{"type":"string","required":true,"title":"developerMessage"}}}'
+        "GestaltOrganization": '{"type":"object","title":"GestaltOrganization","properties":{"orgId":{"type":"string","required":true,"title":"orgId"},"orgName":{"type":"string","required":true,"title":"orgName"}}}'
+securitySchemes:
+  - basic:
+      type: Basic Authentication
+securedBy: [ null, basic ]
+"/orgs/default": 
+    displayName: "DefaultOrganization"
+    description: "Operations on the default organization associated with an API user"
+    get: 
+        description: "Get the default organization"
+        responses: 
+            "404": 
+                description: ""
+            "200": 
+                description: ""
+                body: 
+                    "application/xml": 
+                        schema: "GestaltOrganization"
+                        example: "<GestaltOrganization><orgId>DdqZR8D3VztAanAhDESqKNE4</orgId><orgName>Goliath National Bank</orgName></GestaltOrganization>"
+                    "application/x-yaml": 
+                        schema: "GestaltOrganization"
+                        example: |
+                            ---
+                            orgId: "DdqZR8D3VztAanAhDESqKNE4"
+                            orgName: "Goliath National Bank"
+                    "text/xml": 
+                        schema: "GestaltOrganization"
+                        example: "<GestaltOrganization><orgId>DdqZR8D3VztAanAhDESqKNE4</orgId><orgName>Goliath National Bank</orgName></GestaltOrganization>"
+                    "application/json": 
+                        schema: "GestaltOrganization"
+                        example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","orgName":"Goliath National Bank"}'
+"/apps/{appId}": 
+    displayName: "Application"
+    description: "Operations on a specific application"
+    uriParameters: 
+        "appId": 
+            displayName: "appId"
+            description: "Application ID"
+            type: string
+            required: false
+            repeat: false
+            example: "sample appId"
+    delete: 
+        description: "Delete a specific application"
+        responses: 
+            "404": 
+                description: "Application does not exist, and therefore could not be deleted."
+            "200": 
+    get: 
+        description: "Get a specific application"
+        responses: 
+            "404": 
+                description: "Requested application does not exist"
+            "200": 
+                description: "Found the requested application"
+                body: 
+                    "application/xml": 
+                        schema: "GestaltApplication"
+                        example: "<GestaltApplication><orgId>DdqZR8D3VztAanAhDESqKNE4</orgId><appName>Accounting Software</appName><appId>MKXR5V1LM0sWu77dDoS3i4hm</appId></GestaltApplication>"
+                    "application/x-yaml": 
+                        schema: "GestaltApplication"
+                        example: |
+                            ---
+                            orgId: "DdqZR8D3VztAanAhDESqKNE4"
+                            appName: "Accounting Software"
+                            appId: "MKXR5V1LM0sWu77dDoS3i4hm"
+                    "text/xml": 
+                        schema: "GestaltApplication"
+                        example: "<GestaltApplication><orgId>DdqZR8D3VztAanAhDESqKNE4</orgId><appName>Accounting Software</appName><appId>MKXR5V1LM0sWu77dDoS3i4hm</appId></GestaltApplication>"
+                    "application/json": 
+                        schema: "GestaltApplication"
+                        example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","appName":"Accounting Software","appId":"MKXR5V1LM0sWu77dDoS3i4hm"}'
+"/orgs/{orgId}": 
+    displayName: "Organization"
+    description: "Operations on a specific organization"
+    uriParameters: 
+        "orgId": 
+            displayName: "orgId"
+            description: "Organization ID"
+            type: string
+            required: false
+            repeat: false
+            example: "sample orgId"
+    delete: 
+        description: "Delete a specific organization"
+        responses: 
+            "404": 
+                description: "Organization does not exist, and therefore cannot be deleted."
+            "200": 
+                description: "Organization deleted"
+    get: 
+        description: "Get a specific organization"
+        responses: 
+            "404": 
+                description: "Could not find the current organization"
+            "200": 
+                description: "Found the requested organization"
+                body: 
+                    "application/xml": 
+                        schema: "GestaltOrganization"
+                        example: "<GestaltOrganization><orgId>DdqZR8D3VztAanAhDESqKNE4</orgId><orgName>Goliath National Bank</orgName></GestaltOrganization>"
+                    "application/x-yaml": 
+                        schema: "GestaltOrganization"
+                        example: |
+                            ---
+                            orgId: "DdqZR8D3VztAanAhDESqKNE4"
+                            orgName: "Goliath National Bank"
+                    "text/xml": 
+                        schema: "GestaltOrganization"
+                        example: "<GestaltOrganization><orgId>DdqZR8D3VztAanAhDESqKNE4</orgId><orgName>Goliath National Bank</orgName></GestaltOrganization>"
+                    "application/json": 
+                        schema: "GestaltOrganization"
+                        example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","orgName":"Goliath National Bank"}'

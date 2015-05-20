@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestalt Framework API Documentation</title>
+
+  <link href="styles/style.css" rel="stylesheet" type="text/css">
+
+  <link href="dist/styles/api-console-light-theme.css" rel="stylesheet" type="text/css" />
+
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+</head>
+
+<body>
+  <div class=apiDocs>
+    <h1>Gestalt Framework API docs</h1>
+    <p>Please select an API below to browse the Gestalt Framework REST APIs.
+    <br>
+    <select name="apiId" id="apiId">
+      <option value="">Select an API</option>
+      <option data-spec="" value="gestalt-meta" >Meta API</option>
+      <option data-spec="/apis/security.raml" value="gestalt-security" >Security API</option>
+      <option data-spec="" value="gestalt-billing" >Billing API</option>
+    </select>
+  </div>
+
+  <hr>
+
+  <script src="dist/scripts/api-console-vendor.js"></script>
+  <script type="text/javascript" src="dist/scripts/api-console.js"></script>
+  <script type="text/javascript">
+    $.noConflict();
+  </script>
+
+  <div id="messageDiv">
+  </div>
+  <div id="consoleDiv" ng-app="ramlConsoleApp" ng-cloak class="raml-console-body">
+  </div>
+  
+  <script>
+  $( "#apiId" ).change(function() {
+    var console = $( "#consoleDiv" );
+    var message = $( "#messageDiv" );
+    console.html("")
+    message.html("")
+    var selected = $( "select#apiId option:selected" )  
+    var raml = selected.data("spec");
+    if ( raml ) {
+    	var $c = $('<raml-console id="theConsole" src="' + raml + '" disable-theme-switcher disable-raml-client-generator/>');
+    	console.append($c);
+	angular.element(console).injector().invoke(function($compile) {
+  	  var scope = angular.element($c).scope();
+  	  $compile($c)(scope);
+	});
+    }
+    else if ( selected.val() ) {
+      message.html( "RAML specification not available for " + selected.val());
+    }
+  });
+  </script>
+
+</body>
+</html>
