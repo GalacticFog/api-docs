@@ -5,40 +5,156 @@ baseUri: "HTTPS://security.galacticfog.com:9455/api/v1.0"
 schemas: 
     - 
         "GestaltApplication": '{"type":"object","title":"GestaltApplication","properties":{"orgId":{"type":"string","required":true,"title":"orgId"},"appName":{"type":"string","required":true,"title":"appName"},"appId":{"type":"string","required":true,"title":"appId"}}}'
-        "Account": '{"type":"object","title":"Account","properties":{"lastName":{"type":"string","required":true,"title":"lastName"},"username":{"type":"string","required":true,"title":"username"},"email":{"type":"string","required":true,"title":"email"},"firstName":{"type":"string","required":true,"title":"firstName"}}}'
+        "GestaltAccount": '{"type":"object","title":"GestaltAccount","properties":{"lastName":{"type":"string","required":true,"title":"lastName"},"username":{"type":"string","required":true,"title":"username"},"email":{"type":"string","required":true,"title":"email"},"firstName":{"type":"string","required":true,"title":"firstName"}}}'
+        "GestaltGroup": '{"type":"object","title":"GestaltGroup","properties":{"groupId":{"type":"string","required":true,"title":"groupId"},"groupName":{"type":"string","required":true,"title":"groupName"}}}'
         "GestaltErrorMessage": '{"type":"object","title":"GestaltErrorMessage","properties":{"message":{"type":"string","required":true,"title":"message"},"developerMessage":{"type":"string","required":true,"title":"developerMessage"}}}'
-        "Group": '{"type":"object","title":"Group","properties":{"groupId":{"type":"string","required":true,"title":"groupId"},"groupName":{"type":"string","required":true,"title":"groupName"}}}'
         "GestaltOrganization": '{"type":"object","title":"GestaltOrganization","properties":{"orgId":{"type":"string","required":true,"title":"orgId"},"orgName":{"type":"string","required":true,"title":"orgName"}}}'
 securitySchemes:
   - basic:
       type: Basic Authentication
 securedBy: [ null, basic ]
-"/orgs/default": 
-    displayName: "DefaultOrganization"
-    description: "Operations on the default organization associated with an API user"
-    get: 
-        description: "Get the default organization"
+"/apps/{appId}/register": 
+    displayName: "RegisterDirectory"
+    description: "Register an account directory or group with the specified application"
+"/dirs/{dirId}/accounts/{accountId}": 
+    displayName: "UpdateAccount"
+    description: "Operations on a single account"
+    put: 
+        description: "Update account information"
+        queryParameters: 
+            "accountId": 
+                displayName: "accountId"
+                type: string
+                required: false
+                repeat: false
+                example: "sample accountId"
+            "dirId": 
+                displayName: "dirId"
+                description: "Directory ID containing the account"
+                type: string
+                required: false
+                repeat: false
+                example: "sample dirId"
         responses: 
-            "404": 
-                description: ""
             "200": 
-                description: ""
+                description: "Updated the account information as requested"
                 body: 
-                    "application/xml": 
-                        schema: "GestaltOrganization"
-                        example: "<GestaltOrganization><orgId>DdqZR8D3VztAanAhDESqKNE4</orgId><orgName>Goliath National Bank</orgName></GestaltOrganization>"
-                    "application/x-yaml": 
-                        schema: "GestaltOrganization"
-                        example: |
-                            ---
-                            orgId: "DdqZR8D3VztAanAhDESqKNE4"
-                            orgName: "Goliath National Bank"
-                    "text/xml": 
-                        schema: "GestaltOrganization"
-                        example: "<GestaltOrganization><orgId>DdqZR8D3VztAanAhDESqKNE4</orgId><orgName>Goliath National Bank</orgName></GestaltOrganization>"
                     "application/json": 
-                        schema: "GestaltOrganization"
-                        example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","orgName":"Goliath National Bank"}'
+                        schema: "GestaltAccount"
+                        example: '{"lastName":"Stenson","username":"wingman","email":"bstinson@gnb.com","firstName":"Barney"}'
+    delete: 
+        description: "Delete an account"
+        queryParameters: 
+            "accountId": 
+                displayName: "accountId"
+                type: string
+                required: false
+                repeat: false
+                example: "sample accountId"
+            "dirId": 
+                displayName: "dirId"
+                description: "Directory ID containing the account"
+                type: string
+                required: false
+                repeat: false
+                example: "sample dirId"
+        responses: 
+            "200": 
+                description: "Deleted the account as requested"
+    get: 
+        description: "Get information on an account"
+        queryParameters: 
+            "accountId": 
+                displayName: "accountId"
+                type: string
+                required: false
+                repeat: false
+                example: "sample accountId"
+            "dirId": 
+                displayName: "dirId"
+                description: "Directory ID containing the account"
+                type: string
+                required: false
+                repeat: false
+                example: "sample dirId"
+        responses: 
+            "200": 
+                description: "Returns the requested account"
+                body: 
+                    "application/json": 
+                        schema: "GestaltAccount"
+                        example: '{"lastName":"Stenson","username":"wingman","email":"bstinson@gnb.com","firstName":"Barney"}'
+"/apps/{appId}/groups": 
+    displayName: "ListAppGroups"
+    description: "List the groups associated with a specific application"
+"/apps/{appId}/auth": 
+    displayName: "AuthenticateAccount"
+    description: "Attempt to authenticate account credentials against a specific application"
+"/dirs/{dirId}/groups/{groupId}": 
+    displayName: "DirectoryGroup"
+    description: "Operations on a single directory group"
+    put: 
+        description: "Update information on a specific group"
+        queryParameters: 
+            "groupId": 
+                displayName: "groupId"
+                type: string
+                required: false
+                repeat: false
+                example: "sample groupId"
+            "dirId": 
+                displayName: "dirId"
+                type: string
+                required: false
+                repeat: false
+                example: "sample dirId"
+        responses: 
+            "200": 
+                description: "Updated the group as requested"
+                body: 
+                    "application/json": 
+                        schema: "GestaltGroup"
+                        example: '{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}'
+    delete: 
+        description: "Delete a specific group"
+        queryParameters: 
+            "groupId": 
+                displayName: "groupId"
+                type: string
+                required: false
+                repeat: false
+                example: "sample groupId"
+            "dirId": 
+                displayName: "dirId"
+                type: string
+                required: false
+                repeat: false
+                example: "sample dirId"
+        responses: 
+            "200": 
+                description: "Deleted the group as requested"
+    get: 
+        description: "Get information on a specific group"
+        queryParameters: 
+            "groupId": 
+                displayName: "groupId"
+                type: string
+                required: false
+                repeat: false
+                example: "sample groupId"
+            "dirId": 
+                displayName: "dirId"
+                type: string
+                required: false
+                repeat: false
+                example: "sample dirId"
+        responses: 
+            "200": 
+                description: "Returns the requested group"
+                body: 
+                    "application/json": 
+                        schema: "GestaltGroup"
+                        example: '{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}'
 "/orgs/{orgId}/groups": 
     displayName: "OrganizationGroups"
     description: "List the groups in an organization"
@@ -56,21 +172,133 @@ securedBy: [ null, basic ]
             "200": 
                 description: ""
                 body: 
-                    "application/xml": 
-                        schema: "Group"
-                        example: "<ArrayList><item><groupId>Co7LJUYqKuW4N68RSprJUFAV</groupId><groupName>legal</groupName></item></ArrayList>"
-                    "application/x-yaml": 
-                        schema: "Group"
-                        example: |
-                            ---
-                            - groupId: "Co7LJUYqKuW4N68RSprJUFAV"
-                              groupName: "legal"
-                    "text/xml": 
-                        schema: "Group"
-                        example: "<ArrayList><item><groupId>Co7LJUYqKuW4N68RSprJUFAV</groupId><groupName>legal</groupName></item></ArrayList>"
                     "application/json": 
-                        schema: "Group"
+                        schema: "GestaltGroup"
                         example: '[{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}]'
+"/apps/{appId}/rights/{groupId}": 
+    displayName: "UpdateGroupRights"
+    description: "Operations on user rights with respect to a specific applications"
+"/apps/{appId}/accounts": 
+    displayName: "ListAppAccounts"
+    description: "List the account registered with a specific application"
+"/apps/{appId}": 
+    displayName: "Application"
+    description: "Operations on a specific application"
+    uriParameters: 
+        "appId": 
+            displayName: "appId"
+            description: "Application ID"
+            type: string
+            required: false
+            repeat: false
+            example: "sample appId"
+    delete: 
+        description: "Delete a specific application"
+        responses: 
+            "404": 
+                description: "Application does not exist, and therefore could not be deleted."
+            "200": 
+    get: 
+        description: "Get a specific application"
+        responses: 
+            "404": 
+                description: "Requested application does not exist"
+            "200": 
+                description: "Found the requested application"
+                body: 
+                    "application/json": 
+                        schema: "GestaltApplication"
+                        example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","appName":"Accounting Software","appId":"MKXR5V1LM0sWu77dDoS3i4hm"}'
+"/dirs/{dirId}/accounts": 
+    displayName: "DirectoryAccounts"
+    description: "Operations on directory accounts"
+    post: 
+        description: "Create an account in a specific directory"
+        queryParameters: 
+            "dirId": 
+                displayName: "dirId"
+                type: string
+                required: false
+                repeat: false
+                example: "sample dirId"
+    get: 
+        description: "List accounts in a specific directory"
+        queryParameters: 
+            "dirId": 
+                displayName: "dirId"
+                type: string
+                required: false
+                repeat: false
+                example: "sample dirId"
+"/orgs/default": 
+    displayName: "DefaultOrganization"
+    description: "Operations on the default organization associated with an API user"
+    get: 
+        description: "Get the default organization"
+        responses: 
+            "404": 
+                description: ""
+            "200": 
+                description: ""
+                body: 
+                    "application/json": 
+                        schema: "GestaltOrganization"
+                        example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","orgName":"Goliath National Bank"}'
+"/dirs/{dirId}": 
+    displayName: "Directory"
+    description: "Operations on a specific directory"
+    get: 
+        description: "Get info on a specific directory"
+        queryParameters: 
+            "dirId": 
+                displayName: "dirId"
+                type: string
+                required: false
+                repeat: false
+                example: "sample dirId"
+"/dirs/{dirId}/groups": 
+    displayName: "DirectoryGroups"
+    description: "Operations on directory groups"
+    post: 
+        description: "Create a group in a specific directory"
+        queryParameters: 
+            "dirId": 
+                displayName: "dirId"
+                description: "Directory ID containing the group"
+                type: string
+                required: false
+                repeat: false
+                example: "sample dirId"
+        responses: 
+            "201": 
+                description: "A group was created in the specific directory"
+                body: 
+                    "application/json": 
+                        schema: "GestaltGroup"
+                        example: '{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}'
+    get: 
+        description: "List groups in a specific directory"
+        queryParameters: 
+            "dirId": 
+                displayName: "dirId"
+                description: "Directory ID containing the group"
+                type: string
+                required: false
+                repeat: false
+                example: "sample dirId"
+        responses: 
+            "200": 
+                description: "Returns a list of groups in the specified directory"
+                body: 
+                    "application/json": 
+                        schema: "GestaltGroup"
+                        example: '[{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}]'
+"/orgs/{orgId}/dirs": 
+    displayName: "OrganizationDirectories"
+    description: "Operations on organization directories"
+"/apps/{appId}/rights/{userId}": 
+    displayName: "UpdateUserRights"
+    description: "Operations on user rights with respect to a specific applications"
 "/orgs/{orgId}/accounts": 
     displayName: "OrganizationAccounts"
     description: "Information on organization accounts"
@@ -87,64 +315,9 @@ securedBy: [ null, basic ]
             "200": 
                 description: "Returns a list of accounts in a particular organization"
                 body: 
-                    "application/xml": 
-                        schema: "Account"
-                        example: "<ArrayList><item><lastName>Stenson</lastName><username>wingman</username><email>bstinson@gnb.com</email><firstName>Barney</firstName></item></ArrayList>"
-                    "application/x-yaml": 
-                        schema: "Account"
-                        example: |
-                            ---
-                            - lastName: "Stenson"
-                              username: "wingman"
-                              email: "bstinson@gnb.com"
-                              firstName: "Barney"
-                    "text/xml": 
-                        schema: "Account"
-                        example: "<ArrayList><item><lastName>Stenson</lastName><username>wingman</username><email>bstinson@gnb.com</email><firstName>Barney</firstName></item></ArrayList>"
                     "application/json": 
-                        schema: "Account"
+                        schema: "GestaltAccount"
                         example: '[{"lastName":"Stenson","username":"wingman","email":"bstinson@gnb.com","firstName":"Barney"}]'
-"/apps/{appId}": 
-    displayName: "Application"
-    description: "Operations on a specific application"
-    uriParameters: 
-        "appId": 
-            displayName: "appId"
-            description: "Application ID"
-            type: string
-            required: false
-            repeat: false
-            example: "sample appId"
-    get: 
-        description: "Get a specific application"
-        responses: 
-            "404": 
-                description: "Requested application does not exist"
-            "200": 
-                description: "Found the requested application"
-                body: 
-                    "application/xml": 
-                        schema: "GestaltApplication"
-                        example: "<GestaltApplication><orgId>DdqZR8D3VztAanAhDESqKNE4</orgId><appName>Accounting Software</appName><appId>MKXR5V1LM0sWu77dDoS3i4hm</appId></GestaltApplication>"
-                    "application/x-yaml": 
-                        schema: "GestaltApplication"
-                        example: |
-                            ---
-                            orgId: "DdqZR8D3VztAanAhDESqKNE4"
-                            appName: "Accounting Software"
-                            appId: "MKXR5V1LM0sWu77dDoS3i4hm"
-                    "text/xml": 
-                        schema: "GestaltApplication"
-                        example: "<GestaltApplication><orgId>DdqZR8D3VztAanAhDESqKNE4</orgId><appName>Accounting Software</appName><appId>MKXR5V1LM0sWu77dDoS3i4hm</appId></GestaltApplication>"
-                    "application/json": 
-                        schema: "GestaltApplication"
-                        example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","appName":"Accounting Software","appId":"MKXR5V1LM0sWu77dDoS3i4hm"}'
-    delete: 
-        description: "Delete a specific application"
-        responses: 
-            "404": 
-                description: "Application does not exist, and therefore could not be deleted."
-            "200": 
 "/orgs/{orgId}": 
     displayName: "Organization"
     description: "Operations on a specific organization"
@@ -156,6 +329,13 @@ securedBy: [ null, basic ]
             required: false
             repeat: false
             example: "sample orgId"
+    delete: 
+        description: "Delete a specific organization"
+        responses: 
+            "404": 
+                description: "Organization does not exist, and therefore cannot be deleted."
+            "200": 
+                description: "Organization deleted"
     get: 
         description: "Get a specific organization"
         responses: 
@@ -164,25 +344,6 @@ securedBy: [ null, basic ]
             "200": 
                 description: "Found the requested organization"
                 body: 
-                    "application/xml": 
-                        schema: "GestaltOrganization"
-                        example: "<GestaltOrganization><orgId>DdqZR8D3VztAanAhDESqKNE4</orgId><orgName>Goliath National Bank</orgName></GestaltOrganization>"
-                    "application/x-yaml": 
-                        schema: "GestaltOrganization"
-                        example: |
-                            ---
-                            orgId: "DdqZR8D3VztAanAhDESqKNE4"
-                            orgName: "Goliath National Bank"
-                    "text/xml": 
-                        schema: "GestaltOrganization"
-                        example: "<GestaltOrganization><orgId>DdqZR8D3VztAanAhDESqKNE4</orgId><orgName>Goliath National Bank</orgName></GestaltOrganization>"
                     "application/json": 
                         schema: "GestaltOrganization"
                         example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","orgName":"Goliath National Bank"}'
-    delete: 
-        description: "Delete a specific organization"
-        responses: 
-            "404": 
-                description: "Organization does not exist, and therefore cannot be deleted."
-            "200": 
-                description: "Organization deleted"
