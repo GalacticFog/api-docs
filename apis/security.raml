@@ -1,11 +1,13 @@
 #%RAML 0.8
 title: "GestaltSecurity"
-version: 1.0.0
-baseUri: "HTTP://localhost:9010"
+version: "1.0.0"
+baseUri: "HTTPS://security.galacticfog.com:9455/api/v1.0"
 schemas: 
     - 
         "GestaltApplication": '{"type":"object","title":"GestaltApplication","properties":{"orgId":{"type":"string","required":true,"title":"orgId"},"appName":{"type":"string","required":true,"title":"appName"},"appId":{"type":"string","required":true,"title":"appId"}}}'
+        "Account": '{"type":"object","title":"Account","properties":{"lastName":{"type":"string","required":true,"title":"lastName"},"username":{"type":"string","required":true,"title":"username"},"email":{"type":"string","required":true,"title":"email"},"firstName":{"type":"string","required":true,"title":"firstName"}}}'
         "GestaltErrorMessage": '{"type":"object","title":"GestaltErrorMessage","properties":{"message":{"type":"string","required":true,"title":"message"},"developerMessage":{"type":"string","required":true,"title":"developerMessage"}}}'
+        "Group": '{"type":"object","title":"Group","properties":{"groupId":{"type":"string","required":true,"title":"groupId"},"groupName":{"type":"string","required":true,"title":"groupName"}}}'
         "GestaltOrganization": '{"type":"object","title":"GestaltOrganization","properties":{"orgId":{"type":"string","required":true,"title":"orgId"},"orgName":{"type":"string","required":true,"title":"orgName"}}}'
 securitySchemes:
   - basic:
@@ -37,6 +39,71 @@ securedBy: [ null, basic ]
                     "application/json": 
                         schema: "GestaltOrganization"
                         example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","orgName":"Goliath National Bank"}'
+"/orgs/{orgId}/groups": 
+    displayName: "OrganizationGroups"
+    description: "List the groups in an organization"
+    get: 
+        description: "Get a list of organization accounts"
+        queryParameters: 
+            "orgId": 
+                displayName: "orgId"
+                description: "Organization ID"
+                type: string
+                required: false
+                repeat: false
+                example: "sample orgId"
+        responses: 
+            "200": 
+                description: ""
+                body: 
+                    "application/xml": 
+                        schema: "Group"
+                        example: "<ArrayList><item><groupId>Co7LJUYqKuW4N68RSprJUFAV</groupId><groupName>legal</groupName></item></ArrayList>"
+                    "application/x-yaml": 
+                        schema: "Group"
+                        example: |
+                            ---
+                            - groupId: "Co7LJUYqKuW4N68RSprJUFAV"
+                              groupName: "legal"
+                    "text/xml": 
+                        schema: "Group"
+                        example: "<ArrayList><item><groupId>Co7LJUYqKuW4N68RSprJUFAV</groupId><groupName>legal</groupName></item></ArrayList>"
+                    "application/json": 
+                        schema: "Group"
+                        example: '[{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}]'
+"/orgs/{orgId}/accounts": 
+    displayName: "OrganizationAccounts"
+    description: "Information on organization accounts"
+    get: 
+        description: "Get a list of organization accounts"
+        queryParameters: 
+            "orgId": 
+                displayName: "orgId"
+                type: string
+                required: false
+                repeat: false
+                example: "sample orgId"
+        responses: 
+            "200": 
+                description: "Returns a list of accounts in a particular organization"
+                body: 
+                    "application/xml": 
+                        schema: "Account"
+                        example: "<ArrayList><item><lastName>Stenson</lastName><username>wingman</username><email>bstinson@gnb.com</email><firstName>Barney</firstName></item></ArrayList>"
+                    "application/x-yaml": 
+                        schema: "Account"
+                        example: |
+                            ---
+                            - lastName: "Stenson"
+                              username: "wingman"
+                              email: "bstinson@gnb.com"
+                              firstName: "Barney"
+                    "text/xml": 
+                        schema: "Account"
+                        example: "<ArrayList><item><lastName>Stenson</lastName><username>wingman</username><email>bstinson@gnb.com</email><firstName>Barney</firstName></item></ArrayList>"
+                    "application/json": 
+                        schema: "Account"
+                        example: '[{"lastName":"Stenson","username":"wingman","email":"bstinson@gnb.com","firstName":"Barney"}]'
 "/apps/{appId}": 
     displayName: "Application"
     description: "Operations on a specific application"
@@ -48,12 +115,6 @@ securedBy: [ null, basic ]
             required: false
             repeat: false
             example: "sample appId"
-    delete: 
-        description: "Delete a specific application"
-        responses: 
-            "404": 
-                description: "Application does not exist, and therefore could not be deleted."
-            "200": 
     get: 
         description: "Get a specific application"
         responses: 
@@ -78,6 +139,12 @@ securedBy: [ null, basic ]
                     "application/json": 
                         schema: "GestaltApplication"
                         example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","appName":"Accounting Software","appId":"MKXR5V1LM0sWu77dDoS3i4hm"}'
+    delete: 
+        description: "Delete a specific application"
+        responses: 
+            "404": 
+                description: "Application does not exist, and therefore could not be deleted."
+            "200": 
 "/orgs/{orgId}": 
     displayName: "Organization"
     description: "Operations on a specific organization"
@@ -89,13 +156,6 @@ securedBy: [ null, basic ]
             required: false
             repeat: false
             example: "sample orgId"
-    delete: 
-        description: "Delete a specific organization"
-        responses: 
-            "404": 
-                description: "Organization does not exist, and therefore cannot be deleted."
-            "200": 
-                description: "Organization deleted"
     get: 
         description: "Get a specific organization"
         responses: 
@@ -119,3 +179,10 @@ securedBy: [ null, basic ]
                     "application/json": 
                         schema: "GestaltOrganization"
                         example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","orgName":"Goliath National Bank"}'
+    delete: 
+        description: "Delete a specific organization"
+        responses: 
+            "404": 
+                description: "Organization does not exist, and therefore cannot be deleted."
+            "200": 
+                description: "Organization deleted"
