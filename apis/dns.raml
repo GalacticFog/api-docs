@@ -1,0 +1,271 @@
+#%RAML 0.8
+title: "Gestalt DNS"
+version: "1.0.0"
+baseUri: "https://dns.galacticfog.com:80/api/v1.0"
+schemas: 
+    - 
+        "Deleted": '{"type":"object","title":"Deleted","properties":{"status":{"type":"string","required":true,"title":"status"}}}'
+        "Record": '{"type":"object","title":"Record","properties":{"id":{"type":"string","required":false,"title":"id"},"name":{"type":"string","required":true,"title":"name"},"dnsDomainId":{"type":"string","required":false,"title":"dnsDomainId"},"ttl":{"type":"string","required":true,"title":"ttl"},"recordType":{"type":"string","required":true,"title":"recordType"},"ipAddresses":{"type":"array","required":false,"title":"ipAddresses","items":{"type":"object","$ref":"#/schemas/IPAddress"},"uniqueItems":false}}}'
+        "Domain": '{"type":"object","title":"Domain","properties":{"id":{"type":"number","required":false,"title":"id"},"domainName":{"type":"string","required":true,"title":"domainName"},"nameServers":{"type":"object","$ref":"#/schemas/NameServer","required":false,"title":"nameServers"},"records":{"type":"array","required":false,"title":"records","items":{"type":"object","$ref":"#/schemas/DomainRecords"},"uniqueItems":false},"userData":{"type":"string","required":false,"title":"userData"}}}'
+        "IPAddress": '{"type":"object","title":"IPAddress","properties":{"id":{"type":"string","required":false,"title":"id"},"address":{"type":"string","required":true,"title":"address"}}}'
+        "ErrorMessage": '{"type":"object","title":"ErrorMessage","properties":{"message":{"type":"string","required":true,"title":"message"},"status":{"type":"string","required":true,"title":"status"}}}'
+        "NameServer": '{"type":"object","title":"NameServer","properties":{"id":{"type":"string","required":false,"title":"id"},"serverAddress":{"type":"string","required":true,"title":"serverAddress"},"userData":{"type":"string","required":false,"title":"userData"}}}'
+        "DomainRecords": '{"type":"object","title":"DomainRecords"}'
+securitySchemes: 
+    - 
+"/records/{id}": 
+    displayName: "Records"
+    uriParameters: 
+        "id": 
+            displayName: "id"
+            type: number
+            required: false
+            repeat: false
+            example: "1"
+    delete: 
+        description: ""
+        responses: 
+            "200": 
+                body: 
+                    "application/xml": 
+                        schema: "Deleted"
+                        example: "<Deleted><status>deleted</status></Deleted>"
+                    "application/x-yaml": 
+                        schema: "Deleted"
+                        example: |
+                            ---
+                            status: "deleted"
+                    "text/xml": 
+                        schema: "Deleted"
+                        example: "<Deleted><status>deleted</status></Deleted>"
+                    "application/json": 
+                        schema: "Deleted"
+                        example: '{"status":"deleted"}'
+            "400": 
+    get: 
+        description: ""
+        responses: 
+            "200": 
+                body: 
+                    "application/xml": 
+                        schema: "Record"
+                        example: "<Record><id>1</id><name>testing.example.com</name><dnsDomainId>1</dnsDomainId><ttl>120</ttl><recordType>A</recordType></Record>"
+                    "application/x-yaml": 
+                        schema: "Record"
+                        example: |
+                            ---
+                            id: "1"
+                            name: "testing.example.com"
+                            dnsDomainId: "1"
+                            ttl: "120"
+                            recordType: "A"
+                            ipAddresses: []
+                    "text/xml": 
+                        schema: "Record"
+                        example: "<Record><id>1</id><name>testing.example.com</name><dnsDomainId>1</dnsDomainId><ttl>120</ttl><recordType>A</recordType></Record>"
+                    "application/json": 
+                        schema: "Record"
+                        example: '{"id":"1","name":"testing.example.com","dnsDomainId":"1","ttl":"120","recordType":"A","ipAddresses":[]}'
+"/records": 
+    displayName: "Records"
+    post: 
+        description: ""
+        body: 
+            "application/xml": 
+                schema: "Record"
+                example: "<Record><id>1</id><name>testing.example.com</name><dnsDomainId>1</dnsDomainId><ttl>120</ttl><recordType>A</recordType></Record>"
+            "application/x-yaml": 
+                schema: "Record"
+                example: |
+                    ---
+                    id: "1"
+                    name: "testing.example.com"
+                    dnsDomainId: "1"
+                    ttl: "120"
+                    recordType: "A"
+                    ipAddresses: []
+            "text/xml": 
+                schema: "Record"
+                example: "<Record><id>1</id><name>testing.example.com</name><dnsDomainId>1</dnsDomainId><ttl>120</ttl><recordType>A</recordType></Record>"
+            "application/json": 
+                schema: "Record"
+                example: '{"id":"1","name":"testing.example.com","dnsDomainId":"1","ttl":"120","recordType":"A","ipAddresses":[]}'
+        responses: 
+            "200": 
+                body: 
+                    "application/xml": 
+                        schema: "Record"
+                        example: "<Record><id>1</id><name>testing.example.com</name><dnsDomainId>1</dnsDomainId><ttl>120</ttl><recordType>A</recordType></Record>"
+                    "application/x-yaml": 
+                        schema: "Record"
+                        example: |
+                            ---
+                            id: "1"
+                            name: "testing.example.com"
+                            dnsDomainId: "1"
+                            ttl: "120"
+                            recordType: "A"
+                            ipAddresses: []
+                    "text/xml": 
+                        schema: "Record"
+                        example: "<Record><id>1</id><name>testing.example.com</name><dnsDomainId>1</dnsDomainId><ttl>120</ttl><recordType>A</recordType></Record>"
+                    "application/json": 
+                        schema: "Record"
+                        example: '{"id":"1","name":"testing.example.com","dnsDomainId":"1","ttl":"120","recordType":"A","ipAddresses":[]}'
+            "400": 
+    get: 
+        description: ""
+        queryParameters: 
+            "name": 
+                displayName: "name"
+                type: string
+                required: false
+                repeat: false
+                example: "sample name"
+        responses: 
+            "200": 
+                body: 
+                    "application/xml": 
+                        schema: "Record"
+                        example: "<ArrayList><item><id>1</id><name>testing.example.com</name><dnsDomainId>1</dnsDomainId><ttl>120</ttl><recordType>A</recordType></item></ArrayList>"
+                    "application/x-yaml": 
+                        schema: "Record"
+                        example: |
+                            ---
+                            - id: "1"
+                              name: "testing.example.com"
+                              dnsDomainId: "1"
+                              ttl: "120"
+                              recordType: "A"
+                              ipAddresses: []
+                    "text/xml": 
+                        schema: "Record"
+                        example: "<ArrayList><item><id>1</id><name>testing.example.com</name><dnsDomainId>1</dnsDomainId><ttl>120</ttl><recordType>A</recordType></item></ArrayList>"
+                    "application/json": 
+                        schema: "Record"
+                        example: '[{"id":"1","name":"testing.example.com","dnsDomainId":"1","ttl":"120","recordType":"A","ipAddresses":[]}]'
+"/domains": 
+    displayName: "domains"
+    post: 
+        description: ""
+        body: 
+            "application/xml": 
+                schema: "Domain"
+                example: "<Domain><id>1</id><domainName>test.example.com</domainName><nameServers/><records/><userData>id_returned_from_resource_layer</userData></Domain>"
+            "application/x-yaml": 
+                schema: "Domain"
+                example: |
+                    ---
+                    id: 1
+                    domainName: "test.example.com"
+                    nameServers: null
+                    records: {}
+                    userData: "id_returned_from_resource_layer"
+            "text/xml": 
+                schema: "Domain"
+                example: "<Domain><id>1</id><domainName>test.example.com</domainName><nameServers/><records/><userData>id_returned_from_resource_layer</userData></Domain>"
+            "application/json": 
+                schema: "Domain"
+                example: '{"id":1,"domainName":"test.example.com","nameServers":null,"records":{},"userData":"id_returned_from_resource_layer"}'
+        responses: 
+            "200": 
+                body: 
+                    "application/xml": 
+                        schema: "Domain"
+                        example: "<Domain><id>1</id><domainName>test.example.com</domainName><nameServers/><records/><userData>id_returned_from_resource_layer</userData></Domain>"
+                    "application/x-yaml": 
+                        schema: "Domain"
+                        example: |
+                            ---
+                            id: 1
+                            domainName: "test.example.com"
+                            nameServers: null
+                            records: {}
+                            userData: "id_returned_from_resource_layer"
+                    "text/xml": 
+                        schema: "Domain"
+                        example: "<Domain><id>1</id><domainName>test.example.com</domainName><nameServers/><records/><userData>id_returned_from_resource_layer</userData></Domain>"
+                    "application/json": 
+                        schema: "Domain"
+                        example: '{"id":1,"domainName":"test.example.com","nameServers":null,"records":{},"userData":"id_returned_from_resource_layer"}'
+            "400": 
+    get: 
+        description: ""
+        queryParameters: 
+            "name": 
+                displayName: "name"
+                type: string
+                required: false
+                repeat: false
+                example: "sample name"
+        responses: 
+            "200": 
+                body: 
+                    "application/xml": 
+                        schema: "Domain"
+                        example: "<ArrayList><item><id>1</id><domainName>test.example.com</domainName><nameServers/><records/><userData>id_returned_from_resource_layer</userData></item></ArrayList>"
+                    "application/x-yaml": 
+                        schema: "Domain"
+                        example: |
+                            ---
+                            - id: 1
+                              domainName: "test.example.com"
+                              nameServers: null
+                              records: {}
+                              userData: "id_returned_from_resource_layer"
+                    "text/xml": 
+                        schema: "Domain"
+                        example: "<ArrayList><item><id>1</id><domainName>test.example.com</domainName><nameServers/><records/><userData>id_returned_from_resource_layer</userData></item></ArrayList>"
+                    "application/json": 
+                        schema: "Domain"
+                        example: '[{"id":1,"domainName":"test.example.com","nameServers":null,"records":{},"userData":"id_returned_from_resource_layer"}]'
+            "400": 
+"/domains/{id}": 
+    displayName: "Domains"
+    uriParameters: 
+        "id": 
+            displayName: "id"
+            description: "Id of the organization"
+            type: number
+            required: false
+            repeat: false
+            example: "1"
+    delete: 
+        description: ""
+        responses: 
+            "200": 
+                body: 
+                    "application/xml": 
+                        schema: "Deleted"
+                        example: "<Deleted><status>deleted</status></Deleted>"
+                    "application/x-yaml": 
+                        schema: "Deleted"
+                        example: |
+                            ---
+                            status: "deleted"
+                    "text/xml": 
+                        schema: "Deleted"
+                        example: "<Deleted><status>deleted</status></Deleted>"
+                    "application/json": 
+                        schema: "Deleted"
+                        example: '{"status":"deleted"}'
+    get: 
+        description: ""
+        responses: 
+            "200": 
+                body: 
+                    "application/xml": 
+                        schema: "ErrorMessage"
+                        example: "<ErrorMessage><message>The domain could not be found with id : {id}</message><status>error</status></ErrorMessage>"
+                    "application/x-yaml": 
+                        schema: "ErrorMessage"
+                        example: |
+                            ---
+                            message: "The domain could not be found with id : {id}"
+                            status: "error"
+                    "text/xml": 
+                        schema: "ErrorMessage"
+                        example: "<ErrorMessage><message>The domain could not be found with id : {id}</message><status>error</status></ErrorMessage>"
+                    "application/json": 
+                        schema: "ErrorMessage"
+                        example: '{"message":"The domain could not be found with id : {id}","status":"error"}'
