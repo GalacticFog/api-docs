@@ -11,8 +11,10 @@ schemas:
         "ErrorMessage": '{"type":"object","title":"ErrorMessage","properties":{"message":{"type":"string","required":true,"title":"message"},"status":{"type":"string","required":true,"title":"status"}}}'
         "NameServer": '{"type":"object","title":"NameServer","properties":{"id":{"type":"string","required":false,"title":"id"},"serverAddress":{"type":"string","required":true,"title":"serverAddress"},"userData":{"type":"string","required":false,"title":"userData"}}}'
         "DomainRecords": '{"type":"object","title":"DomainRecords"}'
-securitySchemes: 
-    - 
+securitySchemes:
+  - basic:
+      type: Basic Authentication
+securedBy: [ null, basic ]
 "/records/{id}": 
     displayName: "Records"
     uriParameters: 
