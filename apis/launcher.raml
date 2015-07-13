@@ -6,38 +6,38 @@ securitySchemes:
   - basic:
       type: Basic Authentication
 securedBy: [ null ]
-schemas: 
-    - 
+schemas:
+    -
         "GestaltAppDeployment": '{"type":"object","title":"GestaltAppDeployment","properties":{"id":{"type":"integer","required":true,"title":"id"},"status":{"type":"string","required":true,"title":"status"}}}'
         "GestaltProvider": '{"type":"object","title":"GestaltProvider","properties":{"id":{"type":"integer","required":true,"title":"id"},"name":{"type":"string","required":true,"title":"name"},"description":{"type":"string","required":true,"title":"description"},"type":{"type":"string","required":true,"title":"type"}}}'
-"/providers": 
+"/providers":
     displayName: "Providers"
     description: "Operations on providers"
-    get: 
+    get:
         displayName: "ListProviders"
         description: "List providers"
-    post: 
+    post:
         displayName: "RegisterProvider"
         description: "Register a new provider"
     "/{providerId}":
         displayName: "Provider"
         description: "Operations on a single provider"
         uriParameters:
-            "providerId": 
+            "providerId":
                 displayName: "providerId"
                 description: "Provider ID"
                 type: integer
                 required: true
                 repeat: false
-        get: 
+        get:
             displayName: "GetProvider"
             description: "Get information on a specified provider"
         delete:
             displayName: "DeleteProvider"
             description: "Delete a specified provider"
-"/deployments/{deploymentUUID}": 
-    uriParameters: 
-        "deploymentUUID": 
+"/deployments/{deploymentUUID}":
+    uriParameters:
+        "deploymentUUID":
             displayName: "deploymentUUID"
             description: "Deployment UUID"
             type: string
@@ -45,65 +45,65 @@ schemas:
             repeat: false
     displayName: "Deployment"
     description: "Operations on a deployment"
-    get: 
+    get:
         description: "Get deployment info"
         responses:
             "200":
                 description: "Returns information on a deployment"
-                body: 
-                    "application/json": 
+                body:
+                    "application/json":
                         schema: "GestaltAppDeployment"
-            "404": 
+            "404":
                 description: "Specified deployment does not exist"
-    "/kill": 
-        post: 
+    "/kill":
+        post:
             description: "Kill an application deployment"
-            responses: 
-                "202": 
+            responses:
+                "202":
                     description: "The kill request was accepted and will be processed asynchronously"
-    "/delete": 
-        post: 
+    "/delete":
+        post:
             description: "Delete an application deployment"
-            responses: 
-                "202": 
+            responses:
+                "202":
                     description: "The delete request was accepted and will be processed asynchronously"
 "/scale/{nodeUUID}":
-    uriParameters: 
-        "nodeUUID": 
+    uriParameters:
+        "nodeUUID":
             displayName: "nodeUUID"
             description: "Node UUID"
             type: string
             required: true
             repeat: false
-    queryParameters:
-        "numInstances": 
-            displayName: "numInstances"
-            description: "Target number of instances for the specified node"
-            type: integer
-            required: true
-            repeat: false
-    post: 
-        description: "Scale the specified node to a given number of instances"
-        responses: 
-            "202": 
-                description: "The scaling request was accepted and will be processed asynchronously"
+    post:
+      description: "Scale the specified node to a given number of instances"
+      responses:
+          "202":
+              description: "The scaling request was accepted and will be processed asynchronously"
+      queryParameters:
+          "numInstances":
+              displayName: "numInstances"
+              description: "Target number of instances for the specified node"
+              type: integer
+              required: true
+              repeat: false
 "/migrate/{deploymentUUID}":
-    uriParameters: 
-        "deploymentUUID": 
+    uriParameters:
+        "deploymentUUID":
             displayName: "deploymentUUID"
             description: "Deployment UUID"
             type: string
             required: true
             repeat: false
-    queryParameters:
-        "providerId": 
-            displayName: "providerId"
-            description: "ID of the provider to which the deployment should be migrated"
-            type: integer
-            required: true
-            repeat: false
-    post: 
+    post:
         description: "Migrate the specified deployment to a given provider"
-        responses: 
-            "202": 
+        queryParameters:
+            "providerId":
+                displayName: "providerId"
+                description: "ID of the provider to which the deployment should be migrated"
+                type: integer
+                required: true
+                repeat: false
+        responses:
+            "202":
                 description: "The migrate request was accepted and will be processed asynchronously"
