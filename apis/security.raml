@@ -1,349 +1,393 @@
 #%RAML 0.8
 title: "GestaltSecurity"
 version: "1.0.0"
-baseUri: "HTTPS://security.galacticfog.com:9455/api/v1.0"
-schemas: 
-    - 
-        "GestaltApplication": '{"type":"object","title":"GestaltApplication","properties":{"orgId":{"type":"string","required":true,"title":"orgId"},"appName":{"type":"string","required":true,"title":"appName"},"appId":{"type":"string","required":true,"title":"appId"}}}'
-        "GestaltAccount": '{"type":"object","title":"GestaltAccount","properties":{"lastName":{"type":"string","required":true,"title":"lastName"},"username":{"type":"string","required":true,"title":"username"},"email":{"type":"string","required":true,"title":"email"},"firstName":{"type":"string","required":true,"title":"firstName"}}}'
-        "GestaltGroup": '{"type":"object","title":"GestaltGroup","properties":{"groupId":{"type":"string","required":true,"title":"groupId"},"groupName":{"type":"string","required":true,"title":"groupName"}}}'
-        "GestaltErrorMessage": '{"type":"object","title":"GestaltErrorMessage","properties":{"message":{"type":"string","required":true,"title":"message"},"developerMessage":{"type":"string","required":true,"title":"developerMessage"}}}'
-        "GestaltOrganization": '{"type":"object","title":"GestaltOrganization","properties":{"orgId":{"type":"string","required":true,"title":"orgId"},"orgName":{"type":"string","required":true,"title":"orgName"}}}'
+baseUri: "https://security.galacticfog.com:9455"
 securitySchemes:
   - basic:
       type: Basic Authentication
 securedBy: [ null, basic ]
-"/apps/{appId}/register": 
-    displayName: "RegisterDirectory"
-    description: "Register an account directory or group with the specified application"
-"/dirs/{dirId}/accounts/{accountId}": 
-    displayName: "UpdateAccount"
-    description: "Operations on a single account"
-    put: 
-        description: "Update account information"
-        queryParameters: 
-            "accountId": 
-                displayName: "accountId"
-                type: string
-                required: false
-                repeat: false
-                example: "sample accountId"
-            "dirId": 
-                displayName: "dirId"
-                description: "Directory ID containing the account"
-                type: string
-                required: false
-                repeat: false
-                example: "sample dirId"
-        responses: 
-            "200": 
-                description: "Updated the account information as requested"
-                body: 
-                    "application/json": 
-                        schema: "GestaltAccount"
-                        example: '{"lastName":"Stenson","username":"wingman","email":"bstinson@gnb.com","firstName":"Barney"}'
-    delete: 
-        description: "Delete an account"
-        queryParameters: 
-            "accountId": 
-                displayName: "accountId"
-                type: string
-                required: false
-                repeat: false
-                example: "sample accountId"
-            "dirId": 
-                displayName: "dirId"
-                description: "Directory ID containing the account"
-                type: string
-                required: false
-                repeat: false
-                example: "sample dirId"
-        responses: 
-            "200": 
-                description: "Deleted the account as requested"
+schemas: 
+    - 
+        "GestaltAccount": '{"type":"object","title":"GestaltAccount","properties":{"username":{"type":"string","required":true,"title":"username"},"firstName":{"type":"string","required":true,"title":"firstName"},"lastName":{"type":"string","required":true,"title":"lastName"},"email":{"type":"string","required":true,"title":"email"}}}'
+        "GestaltApplication": '{"type":"object","title":"GestaltApplication","properties":{"appName":{"type":"string","required":true,"title":"appName"},"appId":{"type":"string","required":true,"title":"appId"},"orgId":{"type":"string","required":true,"title":"orgId"}}}'
+        "GestaltAuthResponse": '{"type":"object","title":"GestaltAuthResponse","properties":{"account":{"type":"object","$ref":"#/schemas/GestaltAccount","required":true,"title":"account"},"rights":{"type":"array","required":true,"title":"rights","items":{"type":"object","$ref":"#/schemas/GestaltRightGrant"},"uniqueItems":false}}}'
+        "GestaltBasicAuthToken": '{"type":"object","title":"GestaltBasicAuthToken","properties":{"username":{"type":"string","required":true,"title":"username"},"password":{"type":"string","required":true,"title":"password"}}}'
+        "GestaltErrorMessage": '{"type":"object","title":"GestaltErrorMessage","properties":{"message":{"type":"string","required":true,"title":"message"},"developerMessage":{"type":"string","required":true,"title":"developerMessage"},"resource":{"type":"string","required":true,"title":"resource"},"code":{"type":"integer","required":true,"title":"code"}}}'
+        "GestaltGroup": '{"type":"object","title":"GestaltGroup","properties":{"groupName":{"type":"string","required":true,"title":"groupName"},"groupId":{"type":"string","required":true,"title":"groupId"}}}'
+        "GestaltOrganization": '{"type":"object","title":"GestaltOrganization","properties":{"orgName":{"type":"string","required":true,"title":"orgName"},"orgId":{"type":"string","required":true,"title":"orgId"}}}'
+        "GestaltRightGrant": '{"type":"object","title":"GestaltRightGrant","properties":{"grantName":{"type":"string","required":true,"title":"grantName"},"grantValue":{"type":"string","required":false,"title":"grantValue"}}}'
+"/apps": 
+    displayName: "Applications"
+    description: "Operations on applications"
     get: 
-        description: "Get information on an account"
-        queryParameters: 
-            "accountId": 
-                displayName: "accountId"
-                type: string
-                required: false
-                repeat: false
-                example: "sample accountId"
-            "dirId": 
-                displayName: "dirId"
-                description: "Directory ID containing the account"
-                type: string
-                required: false
-                repeat: false
-                example: "sample dirId"
-        responses: 
-            "200": 
-                description: "Returns the requested account"
-                body: 
-                    "application/json": 
-                        schema: "GestaltAccount"
-                        example: '{"lastName":"Stenson","username":"wingman","email":"bstinson@gnb.com","firstName":"Barney"}'
-"/apps/{appId}/groups": 
-    displayName: "ListAppGroups"
-    description: "List the groups associated with a specific application"
-"/apps/{appId}/auth": 
-    displayName: "AuthenticateAccount"
-    description: "Attempt to authenticate account credentials against a specific application"
-"/dirs/{dirId}/groups/{groupId}": 
-    displayName: "DirectoryGroup"
-    description: "Operations on a single directory group"
-    put: 
-        description: "Update information on a specific group"
-        queryParameters: 
-            "groupId": 
-                displayName: "groupId"
-                type: string
-                required: false
-                repeat: false
-                example: "sample groupId"
-            "dirId": 
-                displayName: "dirId"
-                type: string
-                required: false
-                repeat: false
-                example: "sample dirId"
-        responses: 
-            "200": 
-                description: "Updated the group as requested"
-                body: 
-                    "application/json": 
-                        schema: "GestaltGroup"
-                        example: '{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}'
-    delete: 
-        description: "Delete a specific group"
-        queryParameters: 
-            "groupId": 
-                displayName: "groupId"
-                type: string
-                required: false
-                repeat: false
-                example: "sample groupId"
-            "dirId": 
-                displayName: "dirId"
-                type: string
-                required: false
-                repeat: false
-                example: "sample dirId"
-        responses: 
-            "200": 
-                description: "Deleted the group as requested"
-    get: 
-        description: "Get information on a specific group"
-        queryParameters: 
-            "groupId": 
-                displayName: "groupId"
-                type: string
-                required: false
-                repeat: false
-                example: "sample groupId"
-            "dirId": 
-                displayName: "dirId"
-                type: string
-                required: false
-                repeat: false
-                example: "sample dirId"
-        responses: 
-            "200": 
-                description: "Returns the requested group"
-                body: 
-                    "application/json": 
-                        schema: "GestaltGroup"
-                        example: '{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}'
-"/orgs/{orgId}/groups": 
-    displayName: "OrganizationGroups"
-    description: "List the groups in an organization"
-    get: 
-        description: "Get a list of organization accounts"
-        queryParameters: 
-            "orgId": 
-                displayName: "orgId"
-                description: "Organization ID"
-                type: string
-                required: false
-                repeat: false
-                example: "sample orgId"
-        responses: 
-            "200": 
-                description: ""
-                body: 
-                    "application/json": 
-                        schema: "GestaltGroup"
-                        example: '[{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}]'
-"/apps/{appId}/rights/{groupId}": 
-    displayName: "UpdateGroupRights"
-    description: "Operations on user rights with respect to a specific applications"
-"/apps/{appId}/accounts": 
-    displayName: "ListAppAccounts"
-    description: "List the account registered with a specific application"
-"/apps/{appId}": 
-    displayName: "Application"
-    description: "Operations on a specific application"
-    uriParameters: 
-        "appId": 
-            displayName: "appId"
-            description: "Application ID"
-            type: string
-            required: false
-            repeat: false
-            example: "sample appId"
-    delete: 
-        description: "Delete a specific application"
-        responses: 
-            "404": 
-                description: "Application does not exist, and therefore could not be deleted."
-            "200": 
-    get: 
-        description: "Get a specific application"
-        responses: 
-            "404": 
-                description: "Requested application does not exist"
-            "200": 
-                description: "Found the requested application"
+        description: "Get a list of visible applications"
+        responses:
+            "200":
+                description: "Returns a list of application under the current organization"
                 body: 
                     "application/json": 
                         schema: "GestaltApplication"
-                        example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","appName":"Accounting Software","appId":"MKXR5V1LM0sWu77dDoS3i4hm"}'
-"/dirs/{dirId}/accounts": 
-    displayName: "DirectoryAccounts"
-    description: "Operations on directory accounts"
-    post: 
-        description: "Create an account in a specific directory"
-        queryParameters: 
-            "dirId": 
-                displayName: "dirId"
-                type: string
-                required: false
-                repeat: false
-                example: "sample dirId"
-    get: 
-        description: "List accounts in a specific directory"
-        queryParameters: 
-            "dirId": 
-                displayName: "dirId"
-                type: string
-                required: false
-                repeat: false
-                example: "sample dirId"
-"/orgs/default": 
-    displayName: "DefaultOrganization"
-    description: "Operations on the default organization associated with an API user"
-    get: 
-        description: "Get the default organization"
-        responses: 
             "404": 
-                description: ""
+                description: "Could not determine current organization"
+                body: 
+                    "application/json": 
+                        schema: "GestaltErrorMessage"
+    post: 
+        description: "Create a new application under the current directory"
+    "/{appId}": 
+        displayName: "Application"
+        description: "Operations on a specific application"
+        uriParameters: 
+            "appId": 
+                displayName: "appId"
+                description: "Application ID"
+                type: string
+                required: true
+                repeat: false
+        get: 
+            description: "Get a specific application"
+            responses: 
+                "200": 
+                    description: "Found the requested application"
+                    body: 
+                        "application/json": 
+                            schema: "GestaltApplication"
+                            example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","appName":"Accounting Software","appId":"MKXR5V1LM0sWu77dDoS3i4hm"}'
+                "404": 
+                    description: "Requested application does not exist"
+                    body: 
+                        "application/json": 
+                            schema: "GestaltErrorMessage"
+        put: 
+            description: "Update the details for a specific application"
+            responses: 
+                "200": 
+                    description: "Updated the requested application"
+                    body: 
+                        "application/json": 
+                            schema: "GestaltApplication"
+                            example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","appName":"Accounting Software","appId":"MKXR5V1LM0sWu77dDoS3i4hm"}'
+                "404": 
+                    description: "Specified application does not exist"
+                    body: 
+                        "application/json": 
+                            schema: "GestaltErrorMessage"
+        delete: 
+            description: "Delete a specific application"
+            responses: 
+                "200": 
+                "404": 
+                    description: "Application does not exist, and therefore could not be deleted."
+                    body: 
+                        "application/json": 
+                            schema: "GestaltErrorMessage"
+        "/accounts": 
+            displayName: "ListAppAccounts"
+            description: "List the account registered with a specific application"
+            get: 
+                description: "List the accounts registered against a specific application"
+                responses:
+                    "200": 
+                        description: "Returns a list of accounts"
+                        body:
+                            "application/json": 
+                                schema: "GestaltAccount"
+                                example: '[{"lastName":"Stenson","username":"wingman","email":"bstinson@gnb.com","firstName":"Barney"}]'
+                    "404":
+                        description: "Specified application does not exist"
+                        body: 
+                            "application/json": 
+                                schema: "GestaltErrorMessage"
+        "/auth": 
+            displayName: "AuthenticateAccount"
+            description: "Attempt to authenticate account credentials against a specific application"
+            post: 
+                description: "Authenticate a user against an application"
+                responses: 
+                    "200": 
+                        body: 
+                            "application/json": 
+                                schema: "GestaltAuthResponse"
+                                example: '{"rights":[],"account":null}'
+                    "404":
+                        description: "Specified application does not exist"
+                        body: 
+                            "application/json": 
+                                schema: "GestaltErrorMessage"
+        "/groups": 
+            displayName: "ListAppGroups"
+            description: "List the groups registered with a specific application"
+            get: 
+                description: "List the groups registered with a specific application"
+                responses: 
+                    "200": 
+                        description: "Returns a list of groups"
+                        body:
+                            "application/json": 
+                                schema: "GestaltGroup"
+                    "404":
+                        description: "Specified application does not exist"
+                        body: 
+                            "application/json": 
+                                schema: "GestaltErrorMessage"
+        "/register": 
+            displayName: "RegisterDirectory"
+            description: "Register an account directory or group with the specified application"
+            post: 
+                description: "Register an account directory or group with the specified application"
+                responses: 
+                    "201": 
+                        description: "Created a new account store mapping"
+                    "404": 
+                        description: "Specified application does not exist"
+                        body: 
+                            "application/json": 
+                                schema: "GestaltErrorMessage"
+                    "400": 
+                        description: "Payload was invalid or specified an invalid account store mapping"
+                        body: 
+                            "application/json": 
+                                schema: "GestaltErrorMessage"
+        "/rights/{groupId}": 
+            uriParameters:
+                groupId:
+                    type: string
+                    displayName: "groupId"
+                    description: "Group ID"
+                    required: true
+                    repeat: false
+            displayName: "UpdateGroupRights"
+            description: "Operations on user rights with respect to a specific applications"
+        "/rights/{username}": 
+            uriParameters:
+                username:
+                    type: string
+                    displayName: "username"
+                    description: "User ID"
+                    required: true
+                    repeat: false
+            displayName: "UpdateUserRights"
+            description: "Operations on user rights with respect to a specific applications"
+"/dirs": 
+    displayName: "Directories"
+    description: "Operations on directories"
+    get: 
+        description: "Get a list of visible directories"
+    post: 
+        description: "Create a new directory"
+    "/{dirId}": 
+        uriParameters:
+            dirId:
+                type: string
+                displayName: "dirId"
+                description: "Directory ID"
+                required: true
+                repeat: false
+        displayName: "Directory"
+        description: "Operations on a specific directory"
+        get: 
+            description: "Get info on a specific directory"
+        "/accounts": 
+            displayName: "DirectoryAccounts"
+            description: "Operations on directory accounts"
+            get: 
+                description: "List accounts in a specific directory"
+            post: 
+                description: "Create an account in a specific directory"
+        "/groups": 
+            displayName: "DirectoryGroups"
+            description: "Operations on directory groups"
+            get: 
+                description: "List groups in a specific directory"
+                responses: 
+                    "200": 
+                        description: "Returns a list of groups in the specified directory"
+                        body: 
+                            "application/json": 
+                                schema: "GestaltGroup"
+                                example: '[{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}]'
+            post: 
+                description: "Create a group in a specific directory"
+                responses: 
+                    "201": 
+                        description: "A group was created in the specific directory"
+                        body: 
+                            "application/json": 
+                                schema: "GestaltGroup"
+                                example: '{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}'
+        "/groups/{groupId}": 
+            uriParameters:
+                groupId:
+                    displayName: "groupId"
+                    description: "Group ID"
+                    type: string
+                    required: true
+                    repeat: false
+            displayName: "DirectoryGroup"
+            description: "Operations on a single directory group"
+            get: 
+                description: "Get information on a specific group"
+                responses: 
+                    "200": 
+                        description: "Returns the requested group"
+                        body: 
+                            "application/json": 
+                                schema: "GestaltGroup"
+                                example: '{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}'
+            put: 
+                description: "Update information on a specific group"
+                responses: 
+                    "200": 
+                        description: "Updated the group as requested"
+                        body: 
+                            "application/json": 
+                                schema: "GestaltGroup"
+                                example: '{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}'
+            delete: 
+                description: "Delete a specific group"
+                responses: 
+                    "200": 
+                        description: "Deleted the group as requested"
+"/orgs": 
+    displayName: "Organizations"
+    description: "Operations on organizations"
+    get: 
+        description: "Get a list of visible organizations"
+        responses: 
             "200": 
-                description: ""
+                description: "Returns a list of visible organizations"
                 body: 
                     "application/json": 
                         schema: "GestaltOrganization"
-                        example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","orgName":"Goliath National Bank"}'
-"/dirs/{dirId}": 
-    displayName: "Directory"
-    description: "Operations on a specific directory"
-    get: 
-        description: "Get info on a specific directory"
-        queryParameters: 
-            "dirId": 
-                displayName: "dirId"
-                type: string
-                required: false
-                repeat: false
-                example: "sample dirId"
-"/dirs/{dirId}/groups": 
-    displayName: "DirectoryGroups"
-    description: "Operations on directory groups"
+                        example: '[{"orgId":"DdqZR8D3VztAanAhDESqKNE4","orgName":"Goliath National Bank"}]'
     post: 
-        description: "Create a group in a specific directory"
-        queryParameters: 
-            "dirId": 
-                displayName: "dirId"
-                description: "Directory ID containing the group"
-                type: string
-                required: false
-                repeat: false
-                example: "sample dirId"
+        description: "Create a new organization"
         responses: 
             "201": 
-                description: "A group was created in the specific directory"
-                body: 
-                    "application/json": 
-                        schema: "GestaltGroup"
-                        example: '{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}'
-    get: 
-        description: "List groups in a specific directory"
-        queryParameters: 
-            "dirId": 
-                displayName: "dirId"
-                description: "Directory ID containing the group"
-                type: string
-                required: false
-                repeat: false
-                example: "sample dirId"
-        responses: 
-            "200": 
-                description: "Returns a list of groups in the specified directory"
-                body: 
-                    "application/json": 
-                        schema: "GestaltGroup"
-                        example: '[{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}]'
-"/orgs/{orgId}/dirs": 
-    displayName: "OrganizationDirectories"
-    description: "Operations on organization directories"
-"/apps/{appId}/rights/{userId}": 
-    displayName: "UpdateUserRights"
-    description: "Operations on user rights with respect to a specific applications"
-"/orgs/{orgId}/accounts": 
-    displayName: "OrganizationAccounts"
-    description: "Information on organization accounts"
-    get: 
-        description: "Get a list of organization accounts"
-        queryParameters: 
-            "orgId": 
-                displayName: "orgId"
-                type: string
-                required: false
-                repeat: false
-                example: "sample orgId"
-        responses: 
-            "200": 
-                description: "Returns a list of accounts in a particular organization"
-                body: 
-                    "application/json": 
-                        schema: "GestaltAccount"
-                        example: '[{"lastName":"Stenson","username":"wingman","email":"bstinson@gnb.com","firstName":"Barney"}]'
-"/orgs/{orgId}": 
-    displayName: "Organization"
-    description: "Operations on a specific organization"
-    uriParameters: 
-        "orgId": 
-            displayName: "orgId"
-            description: "Organization ID"
-            type: string
-            required: false
-            repeat: false
-            example: "sample orgId"
-    delete: 
-        description: "Delete a specific organization"
-        responses: 
-            "404": 
-                description: "Organization does not exist, and therefore cannot be deleted."
-            "200": 
-                description: "Organization deleted"
-    get: 
-        description: "Get a specific organization"
-        responses: 
-            "404": 
-                description: "Could not find the current organization"
-            "200": 
-                description: "Found the requested organization"
+                description: "Returns the newly created organization"
                 body: 
                     "application/json": 
                         schema: "GestaltOrganization"
                         example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","orgName":"Goliath National Bank"}'
+    "/current": 
+        displayName: "CurrentOrganization"
+        description: "Operations on the current organization associated with an API user"
+        get: 
+            description: "Get the current organization"
+            responses: 
+                "200": 
+                    description: "Returns the current organizations"
+                    body: 
+                        "application/json": 
+                            schema: "GestaltOrganization"
+                            example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","orgName":"Goliath National Bank"}'
+                "404": 
+                    description: "The current organization could not be determined"
+                    body: 
+                        "application/json": 
+                            schema: "GestaltErrorMessage"
+    "/{orgId}": 
+        uriParameters:
+            orgId:
+                description: "Organization ID"
+                type: string
+                repeat: false
+                required: true
+        displayName: "Organization"
+        description: "Operations on a specific organization"
+        get: 
+            description: "Get a specific organization"
+            responses: 
+                "200": 
+                    description: "Found the requested organization"
+                    body: 
+                        "application/json": 
+                            schema: "GestaltOrganization"
+                            example: '{"orgId":"DdqZR8D3VztAanAhDESqKNE4","orgName":"Goliath National Bank"}'
+                "404": 
+                    description: "Could not find the current organization"
+                    body: 
+                        "application/json": 
+                            schema: "GestaltErrorMessage"
+        delete: 
+            description: "Delete a specific organization"
+            responses: 
+                "204": 
+                    description: "Organization deleted"
+                "404": 
+                    description: "Organization does not exist, and therefore cannot be deleted."
+                    body: 
+                        "application/json": 
+                            schema: "GestaltErrorMessage"
+        "/accounts": 
+            displayName: "OrganizationAccounts"
+            description: "Information on organization accounts"
+            get: 
+                description: "Get a list of organization accounts"
+                responses: 
+                    "200": 
+                        description: "Returns a list of accounts in a particular organization"
+                        body: 
+                            "application/json": 
+                                schema: "GestaltAccount"
+                                example: '[{"lastName":"Stenson","username":"wingman","email":"bstinson@gnb.com","firstName":"Barney"}]'
+        "/dirs": 
+            displayName: "OrganizationDirectories"
+            description: "Operations on organization directories"
+            get: 
+                description: "List the directories in the specified organization"
+                    
+        "/groups": 
+            displayName: "OrganizationGroups"
+            description: "List the groups in an organization"
+            get: 
+                description: "Get a list of organization accounts"
+                responses: 
+                    "200": 
+                        description: ""
+                        body: 
+                            "application/json": 
+                                schema: "GestaltGroup"
+                                example: '[{"groupId":"Co7LJUYqKuW4N68RSprJUFAV","groupName":"legal"}]'
+"/accounts":
+    displayName: "Accounts"
+    description: "Operations on accounts"     
+    get: 
+        displayName: "ListAccounts"
+        description: "List the visible accounts"
+        responses: 
+            "200": 
+                description: "Returns the accounts visible for the current organization"
+    "/{accountId}": 
+        uriParameters:
+            accountId:
+                displayName: "accountId"
+                required: true
+                repeat: false
+                description: "Account ID"
+                type: string
+        displayName: "Account"
+        description: "Operations on a single account"
+        get: 
+            description: "Get information on an account"
+            responses: 
+                "200": 
+                    description: "Returns the requested account"
+                    body: 
+                        "application/json": 
+                            schema: "GestaltAccount"
+                            example: '{"lastName":"Stenson","username":"wingman","email":"bstinson@gnb.com","firstName":"Barney"}'
+        put: 
+            description: "Update account information"
+            responses: 
+                "200": 
+                    description: "Updated the account information as requested"
+                    body: 
+                        "application/json": 
+                            schema: "GestaltAccount"
+                            example: '{"lastName":"Stenson","username":"wingman","email":"bstinson@gnb.com","firstName":"Barney"}'
+        delete: 
+            description: "Delete an account"
+            responses: 
+                "200": 
+                    description: "Deleted the account as requested"

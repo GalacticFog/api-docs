@@ -22,13 +22,6 @@ schemas:
         "TetherSourceInfo": '{"type":"object","title":"TetherSourceInfo","properties":{"apiKey":{"type":"string","required":false,"title":"apiKey"},"apiSecret":{"type":"string","required":false,"title":"apiSecret"}}}'
 "/accounts": 
     displayName: "Accounts"
-    uriParameters: 
-        "id": 
-            displayName: "id"
-            type: string
-            required: false
-            repeat: false
-            example: "1"
     get: 
         description: ""
         queryParameters: 
@@ -50,65 +43,37 @@ schemas:
                     "application/json": 
                         schema: "BillingAccount"
                         example: '{"id":"AED82937F790283","balance":1.1,"invoiceTerms":"net30","currencyId":1,"ownerId":1,"name":"Checking Account","payload":"{ adapter : specific, data : fromAdapter }","paymentSourceId":1,"accountTypeId":1}'
-                    "application/x-yaml": 
-                        schema: "BillingAccount"
-                        example: |
-                            ---
-                            id: "AED82937F790283"
-                            balance: 1.1
-                            invoiceTerms: "net30"
-                            currencyId: 1
-                            ownerId: 1
-                            name: "Checking Account"
-                            payload: "{ adapter : specific, data : fromAdapter }"
-                            paymentSourceId: 1
-                            accountTypeId: 1
-                    "application/xml": 
-                        schema: "BillingAccount"
-                        example: "<BillingAccount><id>AED82937F790283</id><balance>1.1</balance><invoiceTerms>net30</invoiceTerms><currencyId>1</currencyId><ownerId>1</ownerId><name>Checking Account</name><payload>{ adapter : specific, data : fromAdapter }</payload><paymentSourceId>1</paymentSourceId><accountTypeId>1</accountTypeId></BillingAccount>"
-                    "text/xml": 
-                        schema: "BillingAccount"
-                        example: "<BillingAccount><id>AED82937F790283</id><balance>1.1</balance><invoiceTerms>net30</invoiceTerms><currencyId>1</currencyId><ownerId>1</ownerId><name>Checking Account</name><payload>{ adapter : specific, data : fromAdapter }</payload><paymentSourceId>1</paymentSourceId><accountTypeId>1</accountTypeId></BillingAccount>"
     post: 
         description: ""
         body: 
             "application/json": 
                 schema: "BillingAccount"
                 example: '{"id":"AED82937F790283","balance":1.1,"invoiceTerms":"net30","currencyId":1,"ownerId":1,"name":"Checking Account","payload":"{ adapter : specific, data : fromAdapter }","paymentSourceId":1,"accountTypeId":1}'
-            "application/x-yaml": 
-                schema: "BillingAccount"
-                example: |
-                    ---
-                    id: "AED82937F790283"
-                    balance: 1.1
-                    invoiceTerms: "net30"
-                    currencyId: 1
-                    ownerId: 1
-                    name: "Checking Account"
-                    payload: "{ adapter : specific, data : fromAdapter }"
-                    paymentSourceId: 1
-                    accountTypeId: 1
-            "application/xml": 
-                schema: "BillingAccount"
-                example: "<BillingAccount><id>AED82937F790283</id><balance>1.1</balance><invoiceTerms>net30</invoiceTerms><currencyId>1</currencyId><ownerId>1</ownerId><name>Checking Account</name><payload>{ adapter : specific, data : fromAdapter }</payload><paymentSourceId>1</paymentSourceId><accountTypeId>1</accountTypeId></BillingAccount>"
-            "text/xml": 
-                schema: "BillingAccount"
-                example: "<BillingAccount><id>AED82937F790283</id><balance>1.1</balance><invoiceTerms>net30</invoiceTerms><currencyId>1</currencyId><ownerId>1</ownerId><name>Checking Account</name><payload>{ adapter : specific, data : fromAdapter }</payload><paymentSourceId>1</paymentSourceId><accountTypeId>1</accountTypeId></BillingAccount>"
         responses: 
             "200": 
                 body: 
                     "application/json": 
                         schema: "ApiTask"
                         example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
-    delete: 
-        description: ""
-        responses: 
-            "200": 
-                body: 
-                    "application/json": 
-                        schema: "ApiTask"
-                        example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
-"/cancelDebit": 
+    "/{id}":
+        uriParameters: 
+            "id": 
+                displayName: "id"
+                type: string
+                required: true
+                repeat: false
+                example: "1"
+        get:
+            description: ""
+        delete: 
+            description: ""
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "ApiTask"
+                            example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
+"/cancelDebit/{accountId}": 
     displayName: "CancelDebit"
     uriParameters: 
         "accountId": 
@@ -125,7 +90,7 @@ schemas:
                     "application/json": 
                         schema: "ApiTask"
                         example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
-"/completeDebit": 
+"/completeDebit/{accountId}": 
     displayName: "CompleteDebit"
     uriParameters: 
         "accountId": 
@@ -144,28 +109,6 @@ schemas:
                         example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
 "/contacts": 
     displayName: "Contacts"
-    uriParameters: 
-        "id": 
-            displayName: "id"
-            type: number
-            required: false
-            repeat: false
-            example: "1"
-    get: 
-        description: ""
-        queryParameters: 
-            "id": 
-                displayName: "id"
-                type: string
-                required: false
-                repeat: false
-                example: "sample id"
-        responses: 
-            "200": 
-                body: 
-                    "application/json": 
-                        schema: "BillingContact"
-                        example: '{"addressState":"TX","id":1,"lastName":"Example","email":"bob@example.com","firstName":"Bob","addressLine2":"Apt. 301","addressLine1":"123 Happy St.","addressZip":"12345"}'
     post: 
         description: ""
         body: 
@@ -178,104 +121,85 @@ schemas:
                     "application/json": 
                         schema: "ApiTask"
                         example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
-    delete: 
-        description: ""
-        queryParameters: 
+    "/{id}":
+        uriParameters: 
             "id": 
                 displayName: "id"
-                type: string
+                type: number
                 required: false
                 repeat: false
-                example: "sample id"
-        responses: 
-            "200": 
-                body: 
-                    "application/json": 
-                        schema: "ApiTask"
-                        example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
+                example: "1"
+        get: 
+            description: ""
+            queryParameters: 
+                "id": 
+                    displayName: "id"
+                    type: string
+                    required: false
+                    repeat: false
+                    example: "sample id"
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "BillingContact"
+                            example: '{"addressState":"TX","id":1,"lastName":"Example","email":"bob@example.com","firstName":"Bob","addressLine2":"Apt. 301","addressLine1":"123 Happy St.","addressZip":"12345"}'
+        delete: 
+            description: ""
+            queryParameters: 
+                "id": 
+                    displayName: "id"
+                    type: string
+                    required: false
+                    repeat: false
+                    example: "sample id"
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "ApiTask"
+                            example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
 "/debits": 
     displayName: "Debits"
-    uriParameters: 
-        "id": 
-            displayName: "id"
-            type: number
-            required: false
-            repeat: false
-            example: "1"
-    get: 
-        description: ""
-        responses: 
-            "200": 
-                body: 
-                    "application/json": 
-                        schema: "BillingTransaction"
-                        example: |
-                            {"statusId":1,"id":1,"correlationId":"fQLpJIaFnMMFhnQ8bYbkZV6z","price":1.1,"accountId":"XFPVUsf5fnaaUlmIxoRuJHYk","memo":"sample memo","currencyId":1,"payload":"{ \"user\" : \"data\" }","quantity":1.1,"date":"2015-07-09T20:33:16.316Z","productId":1}
-                    "application/x-yaml": 
-                        schema: "BillingTransaction"
-                        example: |
-                            ---
-                            statusId: 1
-                            id: 1
-                            correlationId: "fQLpJIaFnMMFhnQ8bYbkZV6z"
-                            price: 1.1
-                            accountId: "XFPVUsf5fnaaUlmIxoRuJHYk"
-                            memo: "sample memo"
-                            currencyId: 1
-                            payload: "{ \"user\" : \"data\" }"
-                            quantity: 1.1
-                            date: "2015-07-09T20:33:16.316Z"
-                            productId: 1
-                    "application/xml": 
-                        schema: "BillingTransaction"
-                        example: '<BillingTransaction><statusId>1</statusId><id>1</id><correlationId>fQLpJIaFnMMFhnQ8bYbkZV6z</correlationId><price>1.1</price><accountId>XFPVUsf5fnaaUlmIxoRuJHYk</accountId><memo>sample memo</memo><currencyId>1</currencyId><payload>{ "user" : "data" }</payload><quantity>1.1</quantity><date>2015-07-09T20:33:16.316Z</date><productId>1</productId></BillingTransaction>'
-                    "text/xml": 
-                        schema: "BillingTransaction"
-                        example: '<BillingTransaction><statusId>1</statusId><id>1</id><correlationId>fQLpJIaFnMMFhnQ8bYbkZV6z</correlationId><price>1.1</price><accountId>XFPVUsf5fnaaUlmIxoRuJHYk</accountId><memo>sample memo</memo><currencyId>1</currencyId><payload>{ "user" : "data" }</payload><quantity>1.1</quantity><date>2015-07-09T20:33:16.316Z</date><productId>1</productId></BillingTransaction>'
     post: 
         description: ""
         body: 
             "application/json": 
                 schema: "DebitCreateInfo"
                 example: '{"memo":"sample memo","account_id":"sample account_id","product_id":1,"provider_id":1,"quantity":1.1}'
-            "application/x-yaml": 
-                schema: "DebitCreateInfo"
-                example: |
-                    ---
-                    memo: "sample memo"
-                    account_id: "sample account_id"
-                    product_id: 1
-                    provider_id: 1
-                    quantity: 1.1
-            "application/xml": 
-                schema: "DebitCreateInfo"
-                example: "<DebitCreateInfo><memo>sample memo</memo><account_id>sample account_id</account_id><product_id>1</product_id><provider_id>1</provider_id><quantity>1.1</quantity></DebitCreateInfo>"
-            "text/xml": 
-                schema: "DebitCreateInfo"
-                example: "<DebitCreateInfo><memo>sample memo</memo><account_id>sample account_id</account_id><product_id>1</product_id><provider_id>1</provider_id><quantity>1.1</quantity></DebitCreateInfo>"
         responses: 
             "200": 
                 body: 
                     "application/json": 
                         schema: "ApiTask"
                         example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
-    delete: 
-        description: ""
-        responses: 
-            "200": 
-                body: 
-                    "application/json": 
-                        schema: "ApiTask"
-                        example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
+    "/{id}":
+        uriParameters: 
+            "id": 
+                displayName: "id"
+                type: number
+                required: false
+                repeat: false
+                example: "1"
+        get: 
+            description: ""
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "BillingTransaction"
+                            example: |
+                                {"statusId":1,"id":1,"correlationId":"fQLpJIaFnMMFhnQ8bYbkZV6z","price":1.1,"accountId":"XFPVUsf5fnaaUlmIxoRuJHYk","memo":"sample memo","currencyId":1,"payload":"{ \"user\" : \"data\" }","quantity":1.1,"date":"2015-07-09T20:33:16.316Z","productId":1}
+        delete: 
+            description: ""
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "ApiTask"
+                            example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
 "/paymentSources": 
     displayName: "PaymentSources"
-    uriParameters: 
-        "id": 
-            displayName: "id"
-            type: number
-            required: false
-            repeat: false
-            example: "1"
     get: 
         description: ""
         responses: 
@@ -284,50 +208,34 @@ schemas:
                     "application/json": 
                         schema: "BillingPaymentSourceResponse"
                         example: '{"id":"1"}'
-                    "application/x-yaml": 
-                        schema: "BillingPaymentSourceResponse"
-                        example: |
-                            ---
-                            id: "1"
-                    "application/xml": 
-                        schema: "BillingPaymentSourceResponse"
-                        example: "<BillingPaymentSourceResponse><id>1</id></BillingPaymentSourceResponse>"
-                    "text/xml": 
-                        schema: "BillingPaymentSourceResponse"
-                        example: "<BillingPaymentSourceResponse><id>1</id></BillingPaymentSourceResponse>"
     post: 
         description: ""
         body: 
             "application/json": 
                 schema: "PaymentSourceCreateInfo"
                 example: '{"ownerId":1,"cardSource":null,"tetherSource":null}'
-            "application/x-yaml": 
-                schema: "PaymentSourceCreateInfo"
-                example: |
-                    ---
-                    ownerId: 1
-                    cardSource: null
-                    tetherSource: null
-            "application/xml": 
-                schema: "PaymentSourceCreateInfo"
-                example: "<PaymentSourceCreateInfo><ownerId>1</ownerId><cardSource/><tetherSource/></PaymentSourceCreateInfo>"
-            "text/xml": 
-                schema: "PaymentSourceCreateInfo"
-                example: "<PaymentSourceCreateInfo><ownerId>1</ownerId><cardSource/><tetherSource/></PaymentSourceCreateInfo>"
         responses: 
             "200": 
                 body: 
                     "application/json": 
                         schema: "ApiTask"
                         example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
-    delete: 
-        description: ""
-        responses: 
-            "200": 
-                body: 
-                    "application/json": 
-                        schema: "ApiTask"
-                        example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
+    "/{id}":
+        uriParameters: 
+            "id": 
+                displayName: "id"
+                type: number
+                required: false
+                repeat: false
+                example: "1"
+        delete: 
+            description: ""
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "ApiTask"
+                            example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
 "/pendingDebits": 
     displayName: "PendingDebits"
     post: 
@@ -340,100 +248,44 @@ schemas:
                         example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
 "/products": 
     displayName: "Products"
-    uriParameters: 
-        "id": 
-            displayName: "id"
-            type: number
-            required: false
-            repeat: false
-            example: "1"
-    get: 
-        description: ""
-        responses: 
-            "200": 
-                body: 
-                    "application/json": 
-                        schema: "BillingProduct"
-                        example: '{"id":1,"price":1.1,"currencyId":1,"name":"sample name","providerId":1,"code":1,"sku":"USER_DATA"}'
-                    "application/x-yaml": 
-                        schema: "BillingProduct"
-                        example: |
-                            ---
-                            id: 1
-                            price: 1.1
-                            currencyId: 1
-                            name: "sample name"
-                            providerId: 1
-                            code: 1
-                            sku: "USER_DATA"
-                    "application/xml": 
-                        schema: "BillingProduct"
-                        example: "<BillingProduct><id>1</id><price>1.1</price><currencyId>1</currencyId><name>sample name</name><providerId>1</providerId><code>1</code><sku>USER_DATA</sku></BillingProduct>"
-                    "text/xml": 
-                        schema: "BillingProduct"
-                        example: "<BillingProduct><id>1</id><price>1.1</price><currencyId>1</currencyId><name>sample name</name><providerId>1</providerId><code>1</code><sku>USER_DATA</sku></BillingProduct>"
     post: 
         description: ""
         body: 
             "application/json": 
                 schema: "BillingProduct"
                 example: '{"id":1,"price":1.1,"currencyId":1,"name":"sample name","providerId":1,"code":1,"sku":"USER_DATA"}'
-            "application/x-yaml": 
-                schema: "BillingProduct"
-                example: |
-                    ---
-                    id: 1
-                    price: 1.1
-                    currencyId: 1
-                    name: "sample name"
-                    providerId: 1
-                    code: 1
-                    sku: "USER_DATA"
-            "application/xml": 
-                schema: "BillingProduct"
-                example: "<BillingProduct><id>1</id><price>1.1</price><currencyId>1</currencyId><name>sample name</name><providerId>1</providerId><code>1</code><sku>USER_DATA</sku></BillingProduct>"
-            "text/xml": 
-                schema: "BillingProduct"
-                example: "<BillingProduct><id>1</id><price>1.1</price><currencyId>1</currencyId><name>sample name</name><providerId>1</providerId><code>1</code><sku>USER_DATA</sku></BillingProduct>"
         responses: 
             "200": 
                 body: 
                     "application/json": 
                         schema: "ApiTask"
                         example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
-    delete: 
-        description: ""
-        responses: 
-            "200": 
-                body: 
-                    "application/json": 
-                        schema: "ApiTask"
-                        example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
-"/users": 
-    displayName: "Users"
-    uriParameters: 
-        "id": 
-            displayName: "id"
-            description: "Id of the user to fetch"
-            type: number
-            required: false
-            repeat: false
-            example: "1"
-    get: 
-        description: ""
-        queryParameters: 
-            "email": 
-                displayName: "email"
-                type: string
+    "/{id}":
+        uriParameters: 
+            "id": 
+                displayName: "id"
+                type: number
                 required: false
                 repeat: false
-                example: "bob@example.com"
-        responses: 
-            "200": 
-                body: 
-                    "application/json": 
-                        schema: "BillingUser"
-                        example: '{"id":1,"lastName":"Sample","phone":"512-222-3333","email":"bob@example.com","payload":"{ user : data }","firstName":"Bob","password":"S3cr3t5","userType":1}'
+                example: "1"
+        get: 
+            description: ""
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "BillingProduct"
+                            example: '{"id":1,"price":1.1,"currencyId":1,"name":"sample name","providerId":1,"code":1,"sku":"USER_DATA"}'
+        delete: 
+            description: ""
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "ApiTask"
+                            example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
+"/users": 
+    displayName: "Users"
     post: 
         description: ""
         body: 
@@ -447,11 +299,35 @@ schemas:
                         schema: "ApiTask"
                         example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
             "500": 
-    delete: 
-        description: ""
-        responses: 
-            "200": 
-                body: 
-                    "application/json": 
-                        schema: "ApiTask"
-                        example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
+    "/{id}":
+        uriParameters: 
+            "id": 
+                displayName: "id"
+                description: "Id of the user to fetch"
+                type: number
+                required: false
+                repeat: false
+                example: "1"
+        get: 
+            description: ""
+            queryParameters: 
+                "email": 
+                    displayName: "email"
+                    type: string
+                    required: false
+                    repeat: false
+                    example: "bob@example.com"
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "BillingUser"
+                            example: '{"id":1,"lastName":"Sample","phone":"512-222-3333","email":"bob@example.com","payload":"{ user : data }","firstName":"Bob","password":"S3cr3t5","userType":1}'
+        delete: 
+            description: ""
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "ApiTask"
+                            example: '{"service_id":"12","result":null,"request_data":"sample request_data","detail":null,"created":"2015-07-09T20:33:21.868Z","status":"Pending","uuid":"94ea404d0cb143588872121e04935f0b","href":"http://meta.watercoins.io:14374/tasks/94ea404d0cb143588872121e04935f0b"}'
