@@ -1,0 +1,109 @@
+#%RAML 0.8
+title: "GestaltLauncher"
+version: "1.0.0"
+baseUri: "https://launcher.galacticfog.com:80"
+securitySchemes:
+  - basic:
+      type: Basic Authentication
+securedBy: [ null ]
+schemas: 
+    - 
+        "GestaltAppDeployment": '{"type":"object","title":"GestaltAppDeployment","properties":{"id":{"type":"integer","required":true,"title":"id"},"status":{"type":"string","required":true,"title":"status"}}}'
+        "GestaltProvider": '{"type":"object","title":"GestaltProvider","properties":{"id":{"type":"integer","required":true,"title":"id"},"name":{"type":"string","required":true,"title":"name"},"description":{"type":"string","required":true,"title":"description"},"type":{"type":"string","required":true,"title":"type"}}}'
+"/providers": 
+    displayName: "Providers"
+    description: "Operations on providers"
+    get: 
+        displayName: "ListProviders"
+        description: "List providers"
+    post: 
+        displayName: "RegisterProvider"
+        description: "Register a new provider"
+    "/{providerId}":
+        displayName: "Provider"
+        description: "Operations on a single provider"
+        uriParameters:
+            "providerId": 
+                displayName: "providerId"
+                description: "Provider ID"
+                type: integer
+                required: true
+                repeat: false
+        get: 
+            displayName: "GetProvider"
+            description: "Get information on a specified provider"
+        delete:
+            displayName: "DeleteProvider"
+            description: "Delete a specified provider"
+"/deployments/{deploymentUUID}": 
+    uriParameters: 
+        "deploymentUUID": 
+            displayName: "deploymentUUID"
+            description: "Deployment UUID"
+            type: string
+            required: true
+            repeat: false
+    displayName: "Deployment"
+    description: "Operations on a deployment"
+    get: 
+        description: "Get deployment info"
+        responses:
+            "200":
+                description: "Returns information on a deployment"
+                body: 
+                    "application/json": 
+                        schema: "GestaltAppDeployment"
+            "404": 
+                description: "Specified deployment does not exist"
+    "/kill": 
+        post: 
+            description: "Kill an application deployment"
+            responses: 
+                "202": 
+                    description: "The kill request was accepted and will be processed asynchronously"
+    "/delete": 
+        post: 
+            description: "Delete an application deployment"
+            responses: 
+                "202": 
+                    description: "The delete request was accepted and will be processed asynchronously"
+"/scale/{nodeUUID}":
+    uriParameters: 
+        "nodeUUID": 
+            displayName: "nodeUUID"
+            description: "Node UUID"
+            type: string
+            required: true
+            repeat: false
+    queryParameters:
+        "numInstances": 
+            displayName: "numInstances"
+            description: "Target number of instances for the specified node"
+            type: integer
+            required: true
+            repeat: false
+    post: 
+        description: "Scale the specified node to a given number of instances"
+        responses: 
+            "202": 
+                description: "The scaling request was accepted and will be processed asynchronously"
+"/migrate/{deploymentUUID}":
+    uriParameters: 
+        "deploymentUUID": 
+            displayName: "deploymentUUID"
+            description: "Deployment UUID"
+            type: string
+            required: true
+            repeat: false
+    queryParameters:
+        "providerId": 
+            displayName: "providerId"
+            description: "ID of the provider to which the deployment should be migrated"
+            type: integer
+            required: true
+            repeat: false
+    post: 
+        description: "Migrate the specified deployment to a given provider"
+        responses: 
+            "202": 
+                description: "The migrate request was accepted and will be processed asynchronously"
