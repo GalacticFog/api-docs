@@ -17,7 +17,7 @@
   <div class=apiDocs>
     <h1>Gestalt Framework API docs</h1>
     <p>Please select an API below to browse the Gestalt Framework REST APIs.
-    <br>
+    <br><br>
     <select name="apiId" id="apiId">
       <option value="">Select an API</option>
       <option data-spec="" value="gestalt-meta" >Meta API</option>
@@ -35,10 +35,8 @@
     $.noConflict();
   </script>
 
-  <div id="messageDiv">
-  </div>
-  <div id="consoleDiv" ng-app="ramlConsoleApp" ng-cloak class="raml-console-body">
-  </div>
+  <div id="messageDiv"></div>
+  <div id="consoleDiv" ng-app="ramlConsoleApp" ng-cloak class="raml-console-body"></div>
   
   <script>
   $( "#apiId" ).change(function() {
@@ -49,7 +47,9 @@
     var selected = $( "select#apiId option:selected" )  
     var raml = selected.data("spec");
     if ( raml ) {
-    	var $c = $('<raml-console id="theConsole" src="' + raml + '" disable-theme-switcher disable-raml-client-generator/>');
+    	var $c = $('<raml-console id="theConsole" src="' + raml + '" disable-theme-switcher/>');
+        var $url = $('<a href="' + raml + '">Downoad RAML specification...</a>')
+	message.append($url)
     	console.append($c);
 	angular.element(console).injector().invoke(function($compile) {
   	  var scope = angular.element($c).scope();
