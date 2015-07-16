@@ -1,0 +1,1343 @@
+#%RAML 0.8
+title: "Gestalt Meta"
+version: "1.0.0"
+baseUri: "https://galacticfog.com:443/api"
+securitySchemes:
+  - basic:
+      type: Basic Authentication
+securedBy: [ null, basic ]
+schemas: 
+    - 
+        "OrgLink": '{"type":"object","title":"OrgLink","properties":{"id":{"type":"number","required":true,"title":"id"},"name":{"type":"string","required":true,"title":"name"},"type":{"type":"string","required":true,"title":"type"},"href":{"type":"string","required":true,"title":"href"},"rel":{"type":"string","required":true,"title":"rel"}}}'
+        "OwnerLink": '{"type":"object","title":"OwnerLink","properties":{"rel":{"type":"string","required":true,"title":"rel"},"type":{"type":"string","required":true,"title":"type"},"href":{"type":"string","required":true,"title":"href"}}}'
+        "Org": '{"type":"object","title":"Org","properties":{"id":{"type":"number","required":true,"title":"id"},"name":{"type":"string","required":true,"title":"name"},"owner":{"type":"object","$ref":"#/schemas/OwnerLink","required":true,"title":"owner"},"children":{"type":"array","required":false,"title":"children","items":{"type":"object","$ref":"#/schemas/OrgLink"},"uniqueItems":false}}}'
+        "ServiceLink": '{"type":"object","title":"ServiceLink","properties":{"id":{"type":"number","required":true,"title":"id"},"name":{"type":"string","required":true,"title":"name"},"version":{"type":"string","required":true,"title":"version"},"rel":{"type":"string","required":true,"title":"rel"},"type":{"type":"string","required":true,"title":"type"},"href":{"type":"string","required":true,"title":"href"}}}'
+        "Service": '{"type":"object","title":"Service","properties":{"id":{"type":"number","required":true,"title":"id"},"name":{"type":"string","required":true,"title":"name"},"version":{"type":"string","required":true,"title":"version"},"bundle":{"type":"string","required":true,"title":"bundle"},"description":{"type":"string","required":true,"title":"description"},"org":{"type":"object","$ref":"#/schemas/OrgLink","required":true,"title":"org"},"owner":{"type":"object","$ref":"#/schemas/OwnerLink","required":true,"title":"owner"}}}'
+        "WorkspaceLink": '{"type":"object","title":"WorkspaceLink","properties":{"id":{"type":"number","required":true,"title":"id"},"name":{"type":"string","required":true,"title":"name"},"type":{"type":"string","required":true,"title":"type"},"href":{"type":"string","required":true,"title":"href"}}}'
+        "Workspace": '{"type":"object","title":"Workspace","properties":{"id":{"type":"number","required":true,"title":"id"},"name":{"type":"string","required":true,"title":"name"},"org":{"type":"object","$ref":"#/schemas/OrgLink","required":true,"title":"org"},"owner":{"type":"object","$ref":"#/schemas/OwnerLink","required":true,"title":"owner"}}}'
+        "Link": '{"type":"object","title":"Link"}'
+        "Node": '{"type":"object","title":"Node","properties":{"id":{"type":"number","required":true,"title":"id"},"uuid":{"type":"string","required":true,"title":"uuid"},"deployment_id":{"type":"string","required":true,"title":"deployment_id"},"name":{"type":"string","required":true,"title":"name"},"service":{"type":"object","$ref":"#/schemas/Link","required":true,"title":"service"},"location":{"type":"object","$ref":"#/schemas/Link","required":true,"title":"location"},"environment":{"type":"object","$ref":"#/schemas/Link","required":true,"title":"environment"},"template":{"type":"object","$ref":"#/schemas/Link","required":true,"title":"template"}}}'
+        "NodeTemplate": '{"type":"object","title":"NodeTemplate","properties":{"id":{"type":"number","required":true,"title":"id"},"name":{"type":"string","required":true,"title":"name"},"num_instances":{"type":"integer","required":true,"title":"num_instances"},"service":{"type":"object","$ref":"#/schemas/Link","required":true,"title":"service"},"org":{"type":"object","$ref":"#/schemas/Link","required":true,"title":"org"},"owner":{"type":"object","$ref":"#/schemas/Link","required":true,"title":"owner"}}}'
+        "Environment": '{"type":"object","title":"Environment","properties":{"id":{"type":"number","required":true,"title":"id"},"name":{"type":"string","required":true,"title":"name"},"env_type":{"type":"string","required":true,"title":"env_type"},"workspace":{"type":"object","$ref":"#/schemas/Link","required":true,"title":"workspace"},"owner":{"type":"object","$ref":"#/schemas/Link","required":true,"title":"owner"}}}'
+        "Cluster": '{"type":"object","title":"Cluster","properties":{"id":{"type":"number","required":true,"title":"id"},"name":{"type":"string","required":true,"title":"name"},"template_id":{"type":"number","required":true,"title":"template_id"},"environment":{"type":"object","$ref":"#/schemas/Link","required":true,"title":"environment"},"deployment":{"type":"object","$ref":"#/schemas/Link","required":true,"title":"deployment"}}}'
+        "User": '{"type":"object","title":"User","properties":{"id":{"type":"number","required":true,"title":"id"},"email":{"type":"string","required":true,"title":"email"},"username":{"type":"string","required":true,"title":"username"},"first_name":{"type":"string","required":true,"title":"first_name"},"last_name":{"type":"string","required":false,"title":"last_name"},"org":{"type":"object","$ref":"#/schemas/Link","required":true,"title":"org"}}}'
+        "JSON": '{"type":"object","title":"JSON"}'
+        "Task": '{"type":"object","title":"Task","properties":{"id":{"type":"number","required":true,"title":"id"},"uuid":{"type":"string","required":true,"title":"uuid"},"created":{"type":"string","required":true,"title":"created"},"href":{"type":"string","required":true,"title":"href"},"status":{"type":"string","required":true,"title":"status"},"detail":{"type":"object","$ref":"#/schemas/JSON","required":false,"title":"detail"}}}'
+        "BlueprintDeployment": '{"type":"object","title":"BlueprintDeployment","properties":{"location_id":{"type":"integer","required":true,"title":"location_id"},"environment_id":{"type":"number","required":true,"title":"environment_id"},"deployment_id":{"type":"string","required":false,"title":"deployment_id"},"deployment_name":{"type":"string","required":true,"title":"deployment_name"}}}'
+        "ApiActionArgs": '{"type":"object","title":"ApiActionArgs"}'
+        "ApiAction": '{"type":"object","title":"ApiAction","properties":{"action":{"type":"string","required":true,"title":"action"},"api_status":{"type":"string","required":false,"title":"api_status"},"resource":{"type":"string","required":false,"title":"resource"},"message":{"type":"string","required":false,"title":"message"},"args":{"type":"object","$ref":"#/schemas/ApiActionArgs","required":false,"title":"args"},"errors":{"type":"array","required":false,"title":"errors","items":{"type":"object","$ref":"#/schemas/ApiError"},"uniqueItems":false}}}'
+        "ApiError": '{"type":"object","title":"ApiError","properties":{"code":{"type":"string","required":false,"title":"code"},"message":{"type":"string","required":false,"title":"message"}}}'
+        "ApiTask": '{"type":"object","title":"ApiTask","properties":{"status":{"type":"string","required":true,"title":"status"},"uuid":{"type":"string","required":true,"title":"uuid"},"created":{"type":"string","required":true,"title":"created"},"href":{"type":"string","required":true,"title":"href"},"detail":{"type":"object","$ref":"#/schemas/ApiAction","required":true,"title":"detail"},"service_id":{"type":"string","required":true,"title":"service_id"},"result":{"type":"object","$ref":"#/schemas/ApiTaskResult","required":false,"title":"result"},"request_data":{"type":"string","required":false,"title":"request_data"}}}'
+        "ApiTaskResult": '{"type":"object","title":"ApiTaskResult","properties":{"message":{"type":"string","required":false,"title":"message"},"link":{"type":"object","$ref":"#/schemas/ResourceLink","required":false,"title":"link"},"errors":{"type":"array","required":false,"title":"errors","items":{"type":"object","$ref":"#/schemas/ApiError"},"uniqueItems":false},"taskStatus":{"type":"string","required":false,"title":"taskStatus"}}}'
+        "GestaltErrorMessage": '{"type":"object","title":"GestaltErrorMessage","properties":{"message":{"type":"string","required":true,"title":"message"},"developerMessage":{"type":"string","required":true,"title":"developerMessage"},"resource":{"type":"string","required":true,"title":"resource"},"code":{"type":"integer","required":true,"title":"code"}}}'
+        "GestaltGroup": '{"type":"object","title":"GestaltGroup","properties":{"groupName":{"type":"string","required":true,"title":"groupName"},"groupId":{"type":"string","required":true,"title":"groupId"}}}'
+        "EnvironmentIn": '{"type":"object","title":"EnvironmentIn","properties":{"org_id":{"type":"number","required":true,"title":"org_id"},"workspace_id":{"type":"number","required":true,"title":"workspace_id"},"owner_id":{"type":"number","required":true,"title":"owner_id"},"env_type":{"type":"string","required":true,"title":"env_type"},"name":{"type":"string","required":true,"title":"name"},"description":{"type":"string","required":false,"title":"description"}}}'
+        "WorkspaceIn": '{"type":"object","title":"WorkspaceIn","properties":{"org_id":{"type":"number","required":true,"title":"org_id"},"owner_id":{"type":"number","required":true,"title":"owner_id"},"name":{"type":"string","required":true,"title":"name"},"description":{"type":"string","required":false,"title":"description"}}}'
+        "PatchOp": '{"type":"object","title":"PatchOp","properties":{"op":{"type":"string","required":true,"title":"op"},"path":{"type":"string","required":true,"title":"path"},"value":{"type":"string","required":false,"title":"value"}}}'  
+"/orgs": 
+    displayName: "Orgs"
+    description: "Operations on Organizations"
+    get: 
+        description: "Get all visible Orgs"
+        responses: 
+            "200": 
+                description: "The request has succeeded"
+                body: 
+                    "application/json": 
+                        schema: "Link"
+                        example: "[{}]"
+    post:
+        description: "Create a new Org"
+        responses:
+          "202":
+            description: "Request was accepted"
+            body:
+              "application/json":
+                schema: "ApiTask"
+          "400":
+            description: "Bad Request"
+            body:
+              "application/json":
+                schema: "GestaltErrorMessage"
+          "404":
+            description: "Not Found"
+            body:
+              "application/json":
+                schema: "GestaltErrorMessage"
+
+    "/{org_id}": 
+        displayName: "OrgsOrgId"
+        description: "Operations on a specific Organization by ID"
+        uriParameters: 
+            "org_id": 
+                displayName: "org_id"
+                description: "Org ID"
+                type: integer
+                required: true
+                repeat: false        
+        post: 
+          description: "Create a new child Org"
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"          
+        put:
+          description: "Update entire Org resource"
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"          
+          
+        patch:
+          description: "Partially update Org resource"
+          body:
+            "application/json":
+              schema: "PatchOp"
+              example: '[{}]'          
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"          
+          
+        delete:
+          description: "Delete an Org and its descendants"
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"          
+          
+        get: 
+            description: "Get Org by ID"
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "Org"
+                            example: '{"id":1,"name":"sample name","owner":null,"children":[]}'
+                "404": 
+                    description: "Org ID not found."
+    "/{org_id}/workspaces": 
+        displayName: "OrgsOrgIdWorkspaces"
+        description: "Get all visible Workspaces in the named Org"
+        post:
+          description: "Create a new Workspace under Org"
+          body:
+            "application/json":
+              schema: "WorkspaceIn"
+              example: '{"org_id": 1, "owner_id": 2, "name": "TestWorkspace", "description": "Example Workspace"}'          
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"          
+            
+        get: 
+            description: "Get all Workspaces that are direct children of the indicated Organization."
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "Link"
+                            example: "[{}]"
+                "404": 
+                    description: "Org ID not found."
+    "/{org_id}/workspaces/{wksp_id}": 
+        displayName: "OrgsOrgIdWorkspacesWorkspaceId"
+        description: "Get a specific Workspace within the named Org"
+        uriParameters: 
+            "org_id": 
+                displayName: "org_id"
+                description: "Org ID"
+                type: integer
+                required: true
+                repeat: false
+            "wksp_id":        
+                displayName: "wksp_id"
+                description: "Workspace ID"
+                type: integer
+                required: true
+                repeat: false            
+        put:
+          description: "Update entire Workspace resource"
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"         
+        patch:
+          description: "Partially update Workspace resource"
+          body:
+            "application/json":
+              schema: "PatchOp"
+              example: '[{}]'          
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"         
+        delete:
+          description: "Delete Workspace"
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"         
+        get: 
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "Workspace"
+                            example: '{"id":1,"name":"sample name","owner":null,"org":null}'
+                "404":
+                  description: "Not Found"
+                  body:
+                    "application/json":
+                      schema: "GestaltErrorMessage"    
+"/workspaces": 
+    displayName: "Workspaces"
+    description: "Operations on Workspaces"
+    post:    
+        description: "Create a new Workspace"
+        body:
+          "application/json":
+            schema: "WorkspaceIn"
+            example: '{"org_id": 1, "owner_id": 2, "name": "TestWorkspace", "description": "Example Workspace"}'
+        responses:
+          "202":
+            description: "Request was accepted"
+            body:
+              "application/json":
+                schema: "ApiTask"
+                
+          "400":
+            description: "Bad Request"
+            body:
+              "application/json":
+                schema: "GestaltErrorMessage"
+                
+    get: 
+        description: "Get all visible Workspaces"
+        responses:
+          "200":
+            description: "Request was successful"
+            body:
+              "application/json":
+                schema: "Link"
+                example: '[{}]'
+                
+    "/{wksp_id}": 
+        displayName: "WorkspaceById"
+        description: "Operations on a specific Workspace"
+        uriParameters:
+          "wksp_id":        
+              displayName: "wksp_id"
+              description: "Workspace ID"
+              type: integer
+              required: true
+              repeat: false             
+        patch:
+          body:
+            "application/json":
+              schema: "PatchOp"
+              example: '[{}]'          
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"                  
+        put:
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"                       
+        delete:
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"        
+        get: 
+          description: "Get a specific Workspace"
+          responses:
+            "200":
+              description: "Request was successful"
+              body:
+                "application/json":
+                  schema: "Workspace"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"          
+    "/{wksp_id}/environments": 
+        displayName: "WorkspacesWorkspaceIdEnvironments"
+        description: "Get all visible Environments within the named Workspace"
+        uriParameters:
+          "wksp_id":        
+              displayName: "wksp_id"
+              description: "Workspace ID"
+              type: integer
+              required: true
+              repeat: false           
+        post:
+          description: "Create a new Environment in Workspace"
+          body:
+            "application/json":
+              schema: "EnvironmentIn"
+              example: '{"org_id": 1, "workspace_id": 23, "owner_id": 2, "env_type": "dev", "name": "DevEnvironment", "description": "Example Environment"}'
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+                              
+        get: 
+          description: "Get all visible Environments in Workspace"
+          responses:
+            "200":
+              description: "Request was successful"
+              body:
+                "application/json":
+                  schema: "Workspace"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+                        
+    "/{wksp_id}/environments/{env_id}": 
+        displayName: "WorkspacesWorkspaceIdEnvironmentsEnvId"
+        description: "Get a specific Environment from the named Workspace"
+        uriParameters:
+          "wksp_id":        
+              displayName: "wksp_id"
+              description: "Workspace ID"
+              type: integer
+              required: true
+              repeat: false           
+          "env_id":        
+              displayName: "env_id"
+              description: "Environment ID"
+              type: integer
+              required: true
+              repeat: false                 
+        patch:
+          description: "Partially update Environment resource"
+          body:
+            "application/json":
+              schema: "PatchOp"
+              example: '[{}]'          
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"                  
+        put:
+          description: "Update entire Environment resource"
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"                       
+        delete:
+          description: "Delete Environment"
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"   
+        get: 
+            description: "Get Environment by ID"
+            responses: 
+                "200": 
+                    description: "The request was successful."
+                    body: 
+                        "application/json": 
+                            schema: "Environment"
+                            example: '{"id":1,"workspace":null,"env_type":"sample env_type","name":"sample name","owner":null}'
+                "404": 
+                    description: "Environment ID was not found."
+
+"/environments": 
+    displayName: "Environments"
+    description: "Operations on Environments"
+    post:
+        description: "Create a new Environment"
+        body:
+          "application/json":
+            schema: "EnvironmentIn"
+            example: '{"org_id": 1, "workspace_id": 23, "owner_id": 2, "env_type": "dev", "name": "DevEnvironment", "description": "Example Environment"}'
+            
+        responses:
+          "202":
+            description: "Request was accepted"
+            body:
+              "application/json":
+                schema: "ApiTask"
+          "400":
+            description: "Bad Request"
+            body:
+              "application/json":
+                schema: "GestaltErrorMessage"
+          "404":
+            description: "Not Found"
+            body:
+              "application/json":
+                schema: "GestaltErrorMessage"  
+
+    get: 
+        description: "Get all visible Environments"
+        responses: 
+            "200": 
+                body: 
+                    "application/json": 
+                        schema: "Link"
+                        example: "[{}]"
+                        
+    "/{env_id}": 
+        displayName: "EnvironmentsEnvironmentId"
+        description: "Operations on a specific Environment"
+        uriParameters:
+          "env_id":        
+              displayName: "env_id"
+              description: "Environment ID"
+              type: integer
+              required: true
+              repeat: false          
+        patch:
+          description: "Partially update Environment resource"
+          body:
+            "application/json":
+              schema: "PatchOp"
+              example: '[{}]'          
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"                  
+        put:
+          description: "Update entire Environment resource"
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"                       
+        delete:
+          description: "Delete Environment"
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"  
+        get: 
+            description: "Get Environment by ID"
+            responses: 
+                "200": 
+                    description: "The request was successful."
+                    body: 
+                        "application/json": 
+                            schema: "Environment"
+                "404": 
+                    description: "Environment ID was not found."
+    "/{env_id}/clusters": 
+        displayName: "EnvironmentsEnvironmentIdClusters"
+        description: "Get all visible Clusters in the named Environment"
+        uriParameters:
+          "env_id":        
+              displayName: "env_id"
+              description: "Environment ID"
+              type: integer
+              required: true
+              repeat: false          
+        get: 
+          responses: 
+              "200": 
+                  description: "The request was successful."
+                  body: 
+                      "application/json": 
+                          schema: "Cluster"
+              "404": 
+                  description: "Environment ID was not found."        
+                 
+"/services": 
+    displayName: "Services"
+    description: "Operations on Services"
+    post:
+        description: "Create a new Service"
+        responses:
+          "202":
+            description: "Request was accepted"
+            body:
+              "application/json":
+                schema: "ApiTask"
+          "400":
+            description: "Bad Request"
+            body:
+              "application/json":
+                schema: "GestaltErrorMessage"
+          "404":
+            description: "Not Found"
+            body:
+              "application/json":
+                schema: "GestaltErrorMessage"  
+    get: 
+        description: "Get a list of all visible Services."
+        responses: 
+            "200": 
+                description: "The request succeeded."
+                body: 
+                    "application/json": 
+                        schema: "Link"
+                        example: "[{}]"
+    "/{svc_id}": 
+        displayName: "ServicesServiceId"
+        description: "Get a Service by ID"
+        uriParameters:
+          "svc_id":        
+              displayName: "svc_id"
+              description: "Service ID"
+              type: integer
+              required: true
+              repeat: false         
+        patch:
+          description: "Partially update Service resource"
+          body:
+            "application/json":
+              schema: "PatchOp"
+              example: '[{}]'          
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"                  
+        put:
+          description: "Update entire Service resource"
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"                       
+        delete:
+          description: "Delete Service"
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"  
+        get: 
+          responses: 
+            "200": 
+              description: "The request succeeded."
+              body: 
+                  "application/json": 
+                      schema: "Service"
+                      example: '{"id":1,"description":"sample description","name":"sample name","owner":null,"bundle":"sample bundle","org":null,"version":"sample version"}'
+            "404": 
+              description: "The requested service ID was not found."
+              
+    "/{svc_id}/nodes": 
+        displayName: "ServicesServiceIdNodes"
+        description: "Get a list of all visible Nodes deployed from the indicated Service."
+        uriParameters:
+          "svc_id":        
+              displayName: "svc_id"
+              description: "Service ID"
+              type: integer
+              required: true
+              repeat: false          
+        get: 
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "Link"
+                            example: "[{}]"
+                "404": 
+                    description: "Service ID not found."
+    "/{svc_id}/configs": 
+        displayName: "ServicesServiceIdConfigs"
+        description: "Get a list of all visible Configs by Service ID"
+        uriParameters:
+          "svc_id":        
+              displayName: "svc_id"
+              description: "Service ID"
+              type: integer
+              required: true
+              repeat: false          
+        get: 
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "Link"
+                            example: "[{}]"
+                "404": 
+                    description: "Service ID not found."
+
+    "/{svc_id}/configs/{config_name}": 
+        displayName: "ServicesServiceIdConfigsConfigName"
+        description: "Get a named Config associated with the indicated Service."
+        uriParameters:
+          "svc_id":        
+              displayName: "svc_id"
+              description: "Service ID"
+              type: integer
+              required: true
+              repeat: false          
+          "config_name":        
+              displayName: "config_name"
+              description: "Configuration Name"
+              type: integer
+              required: true
+              repeat: false                
+        patch:
+          description: "Partially update the named Config"
+          body:
+            "application/json":
+              schema: "PatchOp"
+              example: '[{}]'          
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"    
+        get: 
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "JSON"
+                            example: "{}"
+                "404": 
+                    description: "Service ID or Config name not found"
+    "/{svc_id}/configs/{config_name}/template": 
+        displayName: "ServicesServiceIdConfigsTemplate"
+        description: "Get the 'template' for a named configuration. Currently this returns unstructured data describing the settings comprising the configuration."
+        uriParameters:
+          "svc_id":        
+              displayName: "svc_id"
+              description: "Service ID"
+              type: integer
+              required: true
+              repeat: false          
+          "config_name":        
+              displayName: "config_name"
+              description: "Configuration Name"
+              type: integer
+              required: true
+              repeat: false           
+        get: 
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "Link"
+                            example: "[{}]"
+                "404": 
+                    description: "Service ID not found."
+    "/{svc_id}/tasks": 
+        displayName: "ServicesServiceIdTasks"
+        description: "Get all visible Tasks generated from the named Service."
+        uriParameters:
+          "svc_id":        
+              displayName: "svc_id"
+              description: "Service ID"
+              type: integer
+              required: true
+              repeat: false          
+        
+        get: 
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "Link"
+                            example: "[{}]"
+                "404": 
+                    description: "Service ID not found."
+    "/{svc_id}/tasks/{task_id}": 
+        displayName: "ServicesServiceIdTasksTaskId"
+        description: "Get a specific Task generated by the named Service."
+        uriParameters:
+          "svc_id":        
+              displayName: "svc_id"
+              description: "Service ID"
+              type: integer
+              required: true
+              repeat: false          
+          "task_id":        
+              displayName: "task_id"
+              description: "Task ID"
+              type: integer
+              required: true
+              repeat: false           
+        get: 
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "Task"
+                            example: '{"id":1,"detail":null,"status":"sample status","created":null,"uuid":"sample uuid","href":"sample href"}'
+                "404": 
+                    description: "Service or Task ID not found."            
+    "/gestalt": 
+        displayName: "ServicesGestalt"
+        description: "Get a list of all Gestalt Services"
+    
+        get: 
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "Link"
+                            example: "[{}]"                            
+"/nodes": 
+    displayName: "Nodes"
+    description: "Operations on Nodes"
+    get: 
+        description: "Get all visible Nodes"
+        responses: 
+            "200": 
+                body: 
+                    "application/json": 
+                        schema: "Link"
+                        example: "[{}]"
+    "/{node_id}": 
+        displayName: "NodesNodeId"
+        description: "Operations on a specific Node"
+        uriParameters:
+          "node_id":        
+              displayName: "node_id"
+              description: "Node ID"
+              type: integer
+              required: true
+              repeat: false          
+       
+        get: 
+            description: "Get Node by ID"
+            responses: 
+                "200": 
+                    description: "Request was successful"
+                    body: 
+                        "application/json": 
+                            schema: "Node"
+                            example: '{"template":null,"id":1,"environment":null,"location":null,"name":"sample name","service":null,"uuid":"sample uuid","deployment_id":"sample deployment_id"}'
+                "404": 
+                    description: "Node ID was not found."
+
+    "/{node_id}/configs": 
+        displayName: "NodesNodeIdConfigs"
+        description: "Get all Configs for the named Node"
+        uriParameters:
+          "node_id":        
+              displayName: "node_id"
+              description: "Node ID"
+              type: integer
+              required: true
+              repeat: false        
+        get: 
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "Link"
+                            example: "[{}]"
+                "404": 
+                    description: "Node ID not found."
+                    body: 
+                        "application/json": 
+                            example: ""
+
+    "/{node_id}/configs/{config_name}": 
+        displayName: "NodesNodeIdConfigsConfigName"
+        description: "Get a named Config for the named Node"
+        uriParameters:
+          "node_id":        
+              displayName: "node_id"
+              description: "Node ID"
+              type: integer
+              required: true
+              repeat: false     
+          "config_name":        
+              displayName: "config_name"
+              description: "Configuration Name"
+              type: integer
+              required: true
+              repeat: false      
+        patch:
+          description: "Partially update the named Config"
+          body:
+            "application/json":
+              schema: "PatchOp"
+              example: '[{}]'          
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"    
+        get: 
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "JSON"
+                            example: "{}"
+                "404": 
+                    description: "Node ID or Config name not found."
+
+
+"/users": 
+    displayName: "Users"
+    description: "Operations on Users"
+    post:
+        description: "Create new Gestalt User"
+    get: 
+        description: "Get a list of all visible Users"
+        responses: 
+            "200": 
+                body: 
+                    "application/json": 
+                        schema: "Link"
+                        example: "[{}]"
+    "/{user_id}": 
+        displayName: "UsersUserId"
+        description: "Operations on a specific User"
+        patch:
+          description: "Partially update User resource"
+          body:
+            "application/json":
+              schema: "PatchOp"
+              example: '[{}]'          
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"                  
+        put:
+          description: "Update entire User resource"
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"                       
+        delete:
+          description: "Delete User"
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"  
+        get: 
+            description: "Get a User by ID"
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "User"
+                            example: '{"id":1,"first_name":"sample first_name","username":"sample username","email":"sample email","last_name":"sample last_name","org":null}'
+                "404": 
+                    description: "User ID not found."
+                    body: 
+                        "application/json": 
+                            example: ""
+    "/{email}": 
+        displayName: "UsersEmail"
+        description: "Operations on a specific User"
+        patch:
+        put:
+        delete:              
+        get: 
+            description: "Get a User by email address."
+            
+            
+"/clusters": 
+    displayName: "Clusters"
+    description: "Operations on Clusters"
+    get: 
+        description: "Get all visible Clusters"
+        responses: 
+            "200": 
+                description: "The request was successful."
+                body: 
+                    "application/json": 
+                        schema: "Link"
+                        example: "[{}]"
+            "404": 
+                description: "Cluster ID was not found."
+    "/{cluster_id}": 
+        displayName: "ClustersClusterId"
+        description: "Operations on a specific Cluster"
+        get: 
+            description: "Get a Cluster by ID"
+            responses: 
+                "200": 
+                    description: "The request was successful."
+                    body: 
+                        "application/json": 
+                            schema: "Cluster"
+                            example: '{"id":1,"environment":null,"name":"sample name","template_id":1,"deployment":null}'
+                "404": 
+                    description: "Cluster ID was not found."
+    "/{cluster_id}/nodes": 
+        displayName: "ClustersClusterIdNodes"
+        description: "Get all visible Nodes within the named Cluster"
+        get: 
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "Link"
+                            example: "[{}]"
+                "404": 
+                    description: "Cluster ID was not found."
+                    body: 
+                        "application/json": 
+                            example: ""
+    "/{cluster_id}/nodes/{node_id}": 
+        displayName: "ClustersClusterIdNodesNodeId"
+        description: "Get a specific node within the Cluster"
+        get: 
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "Node"
+                            example: '{"template":null,"id":1,"environment":null,"location":null,"name":"sample name","service":null,"uuid":"sample uuid","deployment_id":"sample deployment_id"}'
+                "404": 
+                    description: "Cluster or Node ID not found."
+                    
+                    
+"/blueprints": 
+    displayName: "Blueprints"
+    description: "Operations on Blueprints"
+    post:
+        description: "Create a new Blueprint"
+    get: 
+        description: "Get all visible Blueprints"
+        responses: 
+            "200": 
+                body: 
+                    "application/json": 
+                        schema: "Link"
+                        example: "[{}]"
+    "/{id}": 
+        displayName: "BlueprintsId"
+        description: "Operations on a specific Blueprint"
+        patch:
+          description: "Partially update Blueprint resource"
+          body:
+            "application/json":
+              schema: "PatchOp"
+              example: '[{}]'          
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"                  
+        put:
+          description: "Update entire Blueprint resource"
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"                       
+        delete:
+          description: "Delete Blueprint"
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "404":
+              description: "Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"  
+        get: 
+          description: "Get a specific Blueprint by ID"
+          responses: 
+              "200": 
+                  body: 
+                      "application/json": 
+                          schema: "Link"
+                          example: "{}"
+              "404": 
+                  description: "Blueprint ID not found."
+                  body: 
+                      "application/json": 
+                          example: ""        
+    "/{id}/deploy": 
+        displayName: "BlueprintsIdDeploy"
+        description: "Deploy the named Blueprint"
+        post: 
+          description: "Deploy Blueprint"
+          body:
+            "application/json":
+              schema: "BlueprintDeployment"
+              example: '{"location_id": 1, "environment_id": 5, "deployment_id": "cf1fd77d93cc46f4a6a9c2ab9aa512006", "deployment_name": "delete-deployment-test-001"}'
+                        
+          responses:
+            "202":
+              description: "Request was accepted"
+              body:
+                "application/json":
+                  schema: "ApiTask"
+            "400":
+              description: "Bad Request - Malformed JSON"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+            "404":
+              description: "Blueprint Not Found"
+              body:
+                "application/json":
+                  schema: "GestaltErrorMessage"
+              
+"/deployments": 
+    displayName: "Deployments"
+    description: "Operations on Deployments"
+    get: 
+        description: "Get all visible Deployments"
+        responses: 
+            "200": 
+                body: 
+                    "application/json": 
+                        schema: "Link"
+                        example: "[{}]"    
+    "/{id}": 
+        displayName: "DeploymentsId"
+        description: "Operations on a specific Deployment"
+        get: 
+          description: "Get a specific Deployment by ID"
+          responses: 
+              "200": 
+                  body: 
+                      "application/json": 
+                          schema: "Link"
+                          example: "{}"
+              "404": 
+                  description: "Deployment ID not found."
+                  body: 
+                      "application/json": 
+                          example: ""         
+        delete: 
+          description: "Delete the named Deployment"
+          
+          
+"/nodetemplates": 
+    displayName: "NodeTemplates"
+    description: "Operations on NodeTemplates"
+    get: 
+        description: "List all visible NodeTemplates"
+        responses: 
+            "200": 
+                body: 
+                    "application/json": 
+                        schema: "Link"
+                        example: "[{}]"
+    "/{template_id}": 
+        displayName: "NodeTemplatesId"
+        description: "Operations on a specific NodeTemplate"
+        get: 
+            description: "Get NodeTemplate by ID"
+            responses: 
+                "200": 
+                    body: 
+                        "application/json": 
+                            schema: "NodeTemplate"
+                            example: '{"id":1,"name":"sample name","owner":null,"service":null,"num_instances":1,"org":null}'
+                "404": 
+                    description: "NodeTemplate ID not found."
+                    
+"/configs":
+    displayName: "Configurations"
+    description: "Operations on Configurations"
+    get:
+        description: "Get all visible Configs"
+        
+    "/{config_id}":
+      displayName: "ConfigsById"
+      description: "Operations on a specific Config"
+      get:
+          description: "Get Config by ID"
+
