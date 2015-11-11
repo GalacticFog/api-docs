@@ -43,6 +43,10 @@ schemas:
             repeat: false
     get: 
     post: 
+        body: 
+            application/json: 
+                schema: Message
+                example: '{"to":"sample to","body":"sample body","source":"sample source","subject":"sample subject","from":"sample from","date":"sample date","messageId":"sample messageId","inResponseTo":"sample inResponseTo"}'
         responses: 
             "200": 
     delete: 
