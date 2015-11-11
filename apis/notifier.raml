@@ -1,6 +1,6 @@
 #%RAML 0.8
 title: "GestaltNotifier"
-version: "1.0.0"
+version: "1.2.5"
 baseUri: "https://notifier.galacticfog.com:5309"
 securitySchemes:
   - basic:
@@ -9,6 +9,10 @@ securedBy: [ null, basic ]
 schemas: 
     - 
         Message: '{"type":"object","description":"Message format","title":"Message","properties":{"messageId":{"type":"string","required":true,"title":"messageId"},"source":{"type":"string","required":true,"title":"source"},"date":{"type":"string","required":true,"title":"date"},"to":{"type":"string","required":true,"title":"to"},"from":{"type":"string","required":true,"title":"from"},"body":{"type":"string","required":true,"title":"body"},"subject":{"type":"string","required":false,"title":"subject"},"inResponseTo":{"type":"string","required":false,"title":"inResponseTo"}}}'
+        SourceCreate: '{"type":"object","title":"SourceCreate","properties":{"sourceType":{"type":"string","required":true,"title":"sourceType"},"config":{"type":"object","$ref":"#/schemas/Config","required":false,"title":"config"},"handler":{"type":"object","$ref":"#/schemas/HandlerCreate","required":false,"title":"handler"}}}'
+        Config: '{"type":"object","description":"JSON configuration for a source, sink or handler","title":"Config"}'
+        HandlerCreate: '{"type":"object","title":"HandlerCreate","properties":{"handlerType":{"type":"string","required":true,"title":"handlerType"},"config":{"type":"object","$ref":"#/schemas/Config","required":false,"title":"config"}}}'
+        SinkCreate: '{"type":"object","description":"Configuration for creating a sink","title":"SinkCreate","properties":{"sinkType":{"type":"string","required":true,"title":"sinkType"},"config":{"type":"object","$ref":"#/schemas/Config","required":false,"title":"config"}}}'
 /sources: 
     displayName: Sources
     description: Operations on sources
@@ -19,6 +23,14 @@ schemas:
     description: Operations on sinks
     get: 
     post: 
+        description: Create a new sink, used for sinking message to a particular outbound adapter.
+        body: 
+            application/json: 
+                schema: SinkCreate
+                example: '{"config":null,"sinkType":"sample sinkType"}'
+        responses: 
+            "200": 
+                description: Sink was successfully created.
 /handlers/types: 
     displayName: Handlers
     description: Operations on handlers
