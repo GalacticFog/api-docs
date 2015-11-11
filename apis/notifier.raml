@@ -1,93 +1,61 @@
 #%RAML 0.8
-title: "GestaltNotifier"
 version: "1.0.0"
-baseUri: "https://notifier.galacticfog.com:80"
+baseUri: "https://notifier.galacticfog.com:5309"
 securitySchemes:
   - basic:
       type: Basic Authentication
-securedBy: [ null ]
-schemas:
-    -
-"/sources":
-    displayName: "Sources"
-    description: "Operations on sources"
-    get:
-        displayName: "ListSources"
-        description: "List Sources"
-    post:
-        displayName: "CreateSource"
-        description: "Create a new message source"
-    "/{sourceId}":
-        displayName: "Source"
-        description: "Operations on a single source"
-        uriParameters:
-            "sourceId":
-                displayName: "sourceId"
-                description: "Source ID"
-                type: integer
-                required: true
-                repeat: false
-        get:
-            displayName: "GetSource"
-            description: "Get information on a specific source"
-        delete:
-            displayName: "DeleteSource"
-            description: "Delete a specific source"
-    "/types":
-        get:
-            description: "List source types"
-            responses:
-                "200":
-"/sinks":
-    displayName: "Sinks"
-    description: "Operations on sinks"
-    get:
-        displayName: "ListSinks"
-        description: "List Sinks"
-    post:
-        displayName: "CreateSinks"
-        description: "Create a new message sink"
-    "/{sinkId}":
-        displayName: "Sink"
-        description: "Operations on a single sink"
-        uriParameters:
-            "sinkId":
-                displayName: "sinkId"
-                description: "Sink ID"
-                type: integer
-                required: true
-                repeat: false
-        get:
-            displayName: "GetSink"
-            description: "Get information on a specific sink"
-        post:
-            displayName: "SinkMessage"
-            description: "Send a message via a specific sink"
-        delete:
-            displayName: "DeleteSink"
-            description: "Delete a specific sink"
-    "/types":
-        get:
-            description: "List sink types"
-            responses:
-                "200":
-"/handlers":
-    displayName: "Handlers"
-    description: "Operations on handlers"
-    "/types":
-        get:
-            description: "List handler types"
-            responses:
-                "200":
-"/health"
-    displayName: "Health"
-    description: "Health checking"
-    get:
-        responses:
-            "200":
-"/statusAll"
-    displayName: "StatusAll"
-    description: "Status on all sources and sink"
-    get:
-        responses:
-            "200":
+securedBy: [ null, basic ]
+schemas: 
+    - 
+        Message: '{"type":"object","description":"Message format","title":"Message","properties":{"messageId":{"type":"string","required":true,"title":"messageId"},"source":{"type":"string","required":true,"title":"source"},"date":{"type":"string","required":true,"title":"date"},"to":{"type":"string","required":true,"title":"to"},"from":{"type":"string","required":true,"title":"from"},"body":{"type":"string","required":true,"title":"body"},"subject":{"type":"string","required":false,"title":"subject"},"inResponseTo":{"type":"string","required":false,"title":"inResponseTo"}}}'
+/sources: 
+    displayName: Sources
+    description: Operations on sources
+    get: 
+    post: 
+/sinks: 
+    displayName: Sinks
+    description: Operations on sinks
+    get: 
+    post: 
+/handlers/types: 
+    displayName: Handlers
+    description: Operations on handlers
+    get: 
+/statusAll: 
+    displayName: StatusAll
+    description: Status on all sources and sinks
+    get: 
+/health: 
+    displayName: Health
+    description: Health checking
+    get: 
+/sinks/{sinkId}: 
+    displayName: Sink
+    description: Operations on a specific sink
+    uriParameters: 
+        sinkId: 
+            displayName: sinkId
+            description: ID of the target sink
+            type: string
+            required: false
+            repeat: false
+    get: 
+    post: 
+        responses: 
+            "200": 
+    delete: 
+/sources/{sourceId}: 
+    displayName: Source
+    description: Operations on a specific source
+    uriParameters: 
+        sourceId: 
+            displayName: sourceId
+            description: ID of target source
+            type: string
+            required: false
+            repeat: false
+    get: 
+        description: Get a specific sink
+    delete: 
+        description: Delete a specific sink.
